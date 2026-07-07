@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StadiumAI - Presentation</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/night.min.css">
+    
+    <style>
+        .reveal .slides section .mermaid {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .reveal h1, .reveal h2, .reveal h3 {
+            color: #3b82f6;
+            text-transform: none;
+        }
+        .reveal h1 { font-size: 3em; }
+        .reveal h2 { font-size: 2em; margin-bottom: 20px; }
+        .reveal p, .reveal li { font-size: 0.9em; color: #e2e8f0; }
+        .flex-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            text-align: left;
+            gap: 40px;
+        }
+        .flex-item { flex: 1; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Slide 1: Title -->
+            <section>
+                <h1>StadiumAI</h1>
+                <h3>Holographic Digital Twin & Command Center</h3>
+                <p style="margin-top: 50px;">A Premium Showcase for FIFA World Cup 2026</p>
+                <p style="font-size: 0.6em; color: #94a3b8;">Press Right Arrow (→) to proceed or Ctrl+P to Print as PDF</p>
+            </section>
+
+            <!-- Slide 2: Overview -->
+            <section>
+                <h2>Project Vision</h2>
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <ul>
+                            <li><strong>Unified Operations:</strong> Real-time integration of telemetry, security, and fan engagement.</li>
+                            <li><strong>3D Digital Twin:</strong> Live rendering of stadium layers (crowd density, accessible routes, eco grids).</li>
+                            <li><strong>AI Integration:</strong> Built-in multilingual GenAI concierge.</li>
+                            <li><strong>Glassmorphic UI:</strong> Premium aesthetic tailored for high-end operational dashboards.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 3: System Architecture -->
+            <section>
+                <h2>System Architecture</h2>
+                <p>Fully client-side, zero-build, ultra-portable setup.</p>
+                <div class="mermaid">
+                    graph TD;
+                        Main[index.html] --> UI[style.css];
+                        Main --> Logic[app.js];
+                        Logic --> 3D[three-stadium.js];
+                        Logic --> AI[chat-assistant.js];
+                        Logic --> Tel[telemetry-sim.js];
+                </div>
+            </section>
+
+            <!-- Slide 4: Key Modules -->
+            <section>
+                <h2>Core Modules Overview</h2>
+                <ul>
+                    <li><strong>three-stadium.js</strong>: Manages the 3D WebGL scene using Three.js (Cameras, Shaders, Particles).</li>
+                    <li><strong>chat-assistant.js</strong>: Parses user intents (transit, food, help) and provides localized automated responses.</li>
+                    <li><strong>telemetry-sim.js</strong>: Drives the live SVG gauges (Water, Solar, Waste).</li>
+                    <li><strong>incident-manager.js</strong>: The Operations Grid handling mock dispatches and HVAC triggers.</li>
+                </ul>
+            </section>
+
+            <!-- Slide 5: Interaction Flowchart -->
+            <section>
+                <h2>3D Interaction Flow</h2>
+                <div class="mermaid">
+                    sequenceDiagram
+                        participant User
+                        participant UI
+                        participant Engine as Three.js
+                        User->>UI: Selects "Eco Grid" Mode
+                        UI->>Engine: toggle3DLayer('eco')
+                        Engine-->>UI: Disables route tubes
+                        Engine-->>UI: Animates & highlights solar arrays
+                        UI-->>User: Visual feedback updated!
+                </div>
+            </section>
+
+            <!-- Slide 6: Dynamic Clearance -->
+            <section>
+                <h2>Dynamic Role Clearances</h2>
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <p>The dashboard adapts based on assigned roles:</p>
+                        <ol>
+                            <li><strong style="color: #60a5fa;">Fan View:</strong> Basic wayfinding & AI Chatbot.</li>
+                            <li><strong style="color: #a78bfa;">Volunteer View:</strong> Crowd density alerts & Queue tracking.</li>
+                            <li><strong style="color: #34d399;">VIP Command:</strong> Full HVAC access, incident dispatching, raw telemetry logs.</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 7: Conclusion -->
+            <section>
+                <h2>Conclusion</h2>
+                <p>StadiumAI demonstrates how modern web capabilities (WebGL, GenAI simulations, SVG animation) can be blended into a premium, single-page command center.</p>
+                <h3 style="margin-top: 40px; color: #10b981;">Ready for 2026.</h3>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            transition: 'fade',
+            pdfSeparateFragments: false
+        });
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+</html>
