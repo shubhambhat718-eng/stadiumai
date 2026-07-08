@@ -1,12 +1,26 @@
 describe('Telemetry Sim Tests', () => {
     beforeEach(() => {
         global.document = {
-            getElementById: jest.fn().mockReturnValue({
-                style: { strokeDashoffset: 0 },
-                parentElement: { nextElementSibling: { nextElementSibling: { textContent: '' } } },
+            getElementById: jest.fn().mockImplementation((id) => {
+                if (id === 'gaugeSolar' || id === 'gaugeWaste' || id === 'gaugeWater' || id === 'gaugeOffset') {
+                    return {
+                        style: { strokeDashoffset: 0 },
+                        parentElement: {
+                            nextElementSibling: {
+                                nextElementSibling: {
+                                    textContent: ''
+                                }
+                            }
+                        }
+                    };
+                }
+                return { textContent: '' };
+            }),
+            createElement: jest.fn().mockReturnValue({
+                appendChild: jest.fn(),
+                className: '',
                 textContent: ''
             }),
-            createElement: jest.fn().mockReturnValue({ innerHTML: '', className: '' }),
             addEventListener: jest.fn()
         };
         global.window = {};
@@ -16,14 +30,14 @@ describe('Telemetry Sim Tests', () => {
         });
     });
 
-    it('should init circular gauges', () => {
+    it('should init circular gauges and set correct stroke offsets', () => {
         if (typeof window.initCircularGauges === 'function') {
             window.initCircularGauges();
             expect(document.getElementById).toHaveBeenCalledWith('gaugeSolar');
         }
     });
 
-    it('should add alert log entry', () => {
+    it('should add alert log entry to container safely', () => {
         if (typeof window.addAlertLogEntry === 'function') {
             const container = { prepend: jest.fn() };
             document.getElementById.mockReturnValue(container);

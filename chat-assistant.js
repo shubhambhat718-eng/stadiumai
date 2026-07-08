@@ -1,5 +1,28 @@
 "use strict";
 
+/**
+ * Global cache for Chat DOM nodes to optimize event loops.
+ * @type {Object<string, HTMLElement>}
+ */
+const DOM_CHAT = {};
+
+/**
+ * Initializes DOM references for the chat interface.
+ */
+function initChatDOMCache() {
+    DOM_CHAT.chatContainer = document.getElementById('chatContainer');
+    DOM_CHAT.chatInput = document.getElementById('chatInput');
+    DOM_CHAT.langSelect = document.getElementById('langSelect');
+    DOM_CHAT.suggestedChips = document.getElementById('suggestedChips');
+    DOM_CHAT.attendanceEl = document.getElementById('attendanceVal');
+    
+    // Telemetry node caches
+    DOM_CHAT.solarValEl = document.querySelector('#sustainabilityCard .eco-circle-gauge:nth-child(1) .gauge-value');
+    DOM_CHAT.carbonValEl = document.querySelector('#sustainabilityCard .eco-circle-gauge:nth-child(4) .gauge-value');
+    DOM_CHAT.shuttleBox = document.querySelector('.status-box[data-name="Shuttle Hub"]');
+    DOM_CHAT.gateBox = document.querySelector('.status-box[data-name="North Gate"]');
+}
+
 const botAnswers = {
     en: {
         elevator: '♿ The nearest handicap elevators are situated at Gate A (ground level, behind Section 100) and at the VIP entrance (North-West wing). Priority access is active.',
@@ -38,7 +61,7 @@ function escapeHTML(str) {
             '>': '&gt;',
             "'": '&#39;',
             '"': '&quot;'
-		}[tag] || tag)
+        }[tag] || tag)
     );
 }
 
@@ -52,15 +75,10 @@ function getBotResponse(query, lang) {
     query = query.toLowerCase();
     const l = lang === 'es' ? 'es' : lang === 'fr' ? 'fr' : 'en';
     
-    // Dynamic Telemetry Values retrieval
-    const solarValEl = document.querySelector('#sustainabilityCard .eco-circle-gauge:nth-child(1) .gauge-value');
-    const solarVal = solarValEl ? solarValEl.textContent : "2,840 kWh";
-    
-    const carbonValEl = document.querySelector('#sustainabilityCard .eco-circle-gauge:nth-child(4) .gauge-value');
-    const carbonVal = carbonValEl ? carbonValEl.textContent : "1.2 Tons";
-
-    const attendanceEl = document.getElementById('attendanceVal');
-    const attendanceVal = attendanceEl ? attendanceEl.textContent.split(' ')[0] : "78,432";
+    // Read from DOM cache values
+    const solarVal = DOM_CHAT.solarValEl ? DOM_CHAT.solarValEl.textContent : "2,840 kWh";
+    const carbonVal = DOM_CHAT.carbonValEl ? DOM_CHAT.carbonValEl.textContent : "1.2 Tons";
+    const attendanceVal = DOM_CHAT.attendanceEl ? DOM_CHAT.attendanceEl.textContent.split(' ')[0] : "78,432";
 
     // 1. Accessibility query
     if (query.includes('elevator') || query.includes('wheelchair') || query.includes('access') || query.includes('ascensor') || query.includes('handicap') || query.includes('pmr')) {
@@ -88,8 +106,8 @@ function getBotResponse(query, lang) {
     
     // 3. Transit query
     if (query.includes('shuttle') || query.includes('bus') || query.includes('transit') || query.includes('traslado') || query.includes('navette') || query.includes('traffic')) {
-        const shuttleBox = document.querySelector('.status-box[data-name="Shuttle Hub"]');
-        const shuttleStatus = shuttleBox ? shuttleBox.querySelector('.status-tag').textContent : "Normal";
+        const tag = DOM_CHAT.shuttleBox ? DOM_CHAT.shuttleBox.querySelector('.status-tag') : null;
+        const shuttleStatus = tag ? tag.textContent : "Normal";
         
         if (shuttleStatus.toLowerCase().includes('delay') || shuttleStatus.toLowerCase().includes('retard')) {
             if (l === 'es') {
@@ -125,8 +143,8 @@ function getBotResponse(query, lang) {
     
     // 5. Crowd / Gate query
     if (query.includes('gate') || query.includes('puerta') || query.includes('porte') || query.includes('crowd') || query.includes('queue') || query.includes('congestion')) {
-        const gateBox = document.querySelector('.status-box[data-name="North Gate"]');
-        const isCrowded = gateBox ? gateBox.querySelector('.status-tag').textContent.toLowerCase().includes('crowd') : false;
+        const tag = DOM_CHAT.gateBox ? DOM_CHAT.gateBox.querySelector('.status-tag') : null;
+        const isCrowded = tag ? tag.textContent.toLowerCase().includes('crowd') : false;
         
         if (isCrowded) {
             if (window.panStadiumCamera) window.panStadiumCamera('B');
@@ -170,9 +188,14 @@ function getBotResponse(query, lang) {
     }
 }
 
+/**
+ * Appends a bubble chat dialogue to the message board safely.
+ * @param {string} sender - Name of message sender.
+ * @param {string} text - Message text.
+ * @param {boolean} isAI - Indicates if AI-sent bubble.
+ */
 function appendMessage(sender, text, isAI) {
-    const container = document.getElementById('chatContainer');
-    if (!container) return;
+    if (!DOM_CHAT.chatContainer) return;
 
     // Secure the input
     const sanitizedText = escapeHTML(text);
@@ -206,8 +229,8 @@ function appendMessage(sender, text, isAI) {
     bubble.appendChild(avatarDiv);
     bubble.appendChild(textBubble);
     
-    container.appendChild(bubble);
-    container.scrollTop = container.scrollHeight;
+    DOM_CHAT.chatContainer.appendChild(bubble);
+    DOM_CHAT.chatContainer.scrollTop = DOM_CHAT.chatContainer.scrollHeight;
     
     if (window.lucide) {
         window.lucide.createIcons();
@@ -215,25 +238,22 @@ function appendMessage(sender, text, isAI) {
 }
 
 window.handleChipClick = function(text) {
-    const input = document.getElementById('chatInput');
-    if (input) {
-        input.value = text;
+    if (DOM_CHAT.chatInput) {
+        DOM_CHAT.chatInput.value = text;
         window.handleSendChat();
     }
 };
 
 window.handleSendChat = function() {
-    const input = document.getElementById('chatInput');
-    if (!input) return;
-    const text = input.value.trim();
+    if (!DOM_CHAT.chatInput) return;
+    const text = DOM_CHAT.chatInput.value.trim();
     if (!text) return;
     
-    const langSelect = document.getElementById('langSelect');
-    const lang = langSelect ? langSelect.value : 'en';
+    const lang = DOM_CHAT.langSelect ? DOM_CHAT.langSelect.value : 'en';
     
     // User message bubble
     appendMessage("You", text, false);
-    input.value = '';
+    DOM_CHAT.chatInput.value = '';
     
     // AI Response Simulation
     setTimeout(() => {
@@ -244,6 +264,9 @@ window.handleSendChat = function() {
 
 // Bind elements on load
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize element caches
+    initChatDOMCache();
+
     const chatSendBtn = document.getElementById('chatSendBtn');
     if (chatSendBtn) {
         chatSendBtn.addEventListener('click', () => {
@@ -251,18 +274,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const chatInput = document.getElementById('chatInput');
-    if (chatInput) {
-        chatInput.addEventListener('keydown', (e) => {
+    if (DOM_CHAT.chatInput) {
+        DOM_CHAT.chatInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 window.handleSendChat();
             }
         });
     }
 
-    const suggestedChips = document.getElementById('suggestedChips');
-    if (suggestedChips) {
-        suggestedChips.querySelectorAll('.suggested-chip').forEach(chip => {
+    if (DOM_CHAT.suggestedChips) {
+        DOM_CHAT.suggestedChips.querySelectorAll('.suggested-chip').forEach(chip => {
             chip.addEventListener('click', () => {
                 const query = chip.getAttribute('data-query');
                 if (query) window.handleChipClick(query);

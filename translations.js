@@ -1,7 +1,7 @@
 window.langData = {
     en: {
         liveBadge: "LIVE — FIFA WORLD CUP 2026",
-        heroTitle: "GenAI Stadium Twin<br>Operations Twin",
+        heroTitle: "GenAI Stadium Operations Twin",
         heroDesc: "Interactive real-time 3D control center for tournament venues. Powered by generative AI for predictive crowd density routing, multilingual fan support, adaptive accessibility controls, and carbon-neutral resource tracking.",
         btnDash: "Control Dashboard",
         btnChat: "Ask AI Concierge",
@@ -72,7 +72,7 @@ window.langData = {
     },
     es: {
         liveBadge: "EN VIVO — COPA MUNDIAL FIFA 2026",
-        heroTitle: "Gemelo de Operaciones<br>GenAI del Estadio",
+        heroTitle: "Gemelo de Operaciones GenAI del Estadio",
         heroDesc: "Centro de control 3D interactivo en tiempo real para sedes del torneo. Impulsado por IA generativa para enrutamiento predictivo de multitudes, soporte multilingüe, controles de accesibilidad adaptables y seguimiento de recursos neutros en carbono.",
         btnDash: "Consola de Control",
         btnChat: "Preguntar al Concierge",
@@ -143,7 +143,7 @@ window.langData = {
     },
     fr: {
         liveBadge: "EN DIRECT — COUPE DU MONDE DE LA FIFA 2026",
-        heroTitle: "Jumeau Numérique<br>d'Opérations GenAI",
+        heroTitle: "Jumeau Numérique d'Opérations GenAI",
         heroDesc: "Centre de contrôle 3D interactif en temps réel. Propulsé par l'IA générative pour le routage prédictif des foules, l'assistance multilingue, l'accessibilité adaptable et le suivi carbone.",
         btnDash: "Tableau de Bord",
         btnChat: "Demander au Concierge",

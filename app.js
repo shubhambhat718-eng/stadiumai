@@ -1,33 +1,58 @@
 "use strict";
 
-// Landing Page Transition
+/**
+ * Global cache for DOM elements to improve runtime lookup performance.
+ * @type {Object<string, HTMLElement>}
+ */
+const DOM = {};
+
+/**
+ * Initializes the DOM cache elements on page load.
+ */
+function initDOMCache() {
+    DOM.landingPage = document.getElementById('landingPage');
+    DOM.mainProject = document.getElementById('mainProject');
+    DOM.canvas = document.getElementById('stadium-canvas');
+    DOM.clearanceIndicator = document.getElementById('clearanceIndicator');
+    DOM.clearanceLabel = document.getElementById('clearanceLabel');
+    DOM.opsOverlay = document.getElementById('opsConsoleOverlay');
+    DOM.alertsOverlay = document.getElementById('alertsOverlay');
+    DOM.langSelect = document.getElementById('langSelect');
+    DOM.routeStart = document.getElementById('routeStart');
+    DOM.routeDest = document.getElementById('routeDest');
+    DOM.routePath = document.getElementById('routePath');
+    DOM.routeTrack = document.getElementById('routeTrack');
+    DOM.startLblText = document.getElementById('startLblText');
+    DOM.destLblText = document.getElementById('destLblText');
+    DOM.valDistance = document.getElementById('valDistance');
+    DOM.valTime = document.getElementById('valTime');
+    DOM.valAccessible = document.getElementById('valAccessible');
+    DOM.welcomeMsg = document.getElementById('welcomeMsg');
+}
+
+/**
+ * Transitions the application from the landing viewport overlay to the main twin.
+ */
 window.enterMainProject = function() {
-    const landingPage = document.getElementById('landingPage');
-    const mainProject = document.getElementById('mainProject');
+    if (!DOM.landingPage || !DOM.mainProject) return;
     
-    if (!landingPage || !mainProject) return;
-    
-    landingPage.classList.add('hidden');
+    DOM.landingPage.classList.add('hidden');
     
     setTimeout(() => {
-        landingPage.style.display = 'none';
-        mainProject.style.display = 'block';
-        mainProject.classList.add('visible');
+        DOM.landingPage.style.display = 'none';
+        DOM.mainProject.style.display = 'block';
+        DOM.mainProject.classList.add('visible');
         
-        // Force Lucide to re-process all icons in the now-visible DOM
         if (window.lucide) {
             window.lucide.createIcons();
-            // Double-pass to ensure absolutely everything is rendered
             setTimeout(() => { window.lucide.createIcons(); }, 50);
         }
         
         setTimeout(() => {
             if (typeof init3DTilt === 'function') init3DTilt();
             
-            // Setup Three.js holographic twin now that container is visible
-            const canvas = document.getElementById('stadium-canvas');
-            if (canvas && window.initStadiumScene && !window.stadiumInitialized) {
-                window.initStadiumScene(canvas);
+            if (DOM.canvas && window.initStadiumScene && !window.stadiumInitialized) {
+                window.initStadiumScene(DOM.canvas);
                 window.stadiumInitialized = true;
             }
         }, 200);
@@ -37,12 +62,20 @@ window.enterMainProject = function() {
 // Initialize landing page icons on load
 document.addEventListener('DOMContentLoaded', () => {
     if (window.lucide) {
-        lucide.createIcons();
+        window.lucide.createIcons();
     }
 });
 
+/**
+ * Tracks the current active role-based permission clearance level.
+ * @type {string}
+ */
 window.activeClearance = 'fan';
 
+/**
+ * Smoothly scrolls the viewport window to a specified section element.
+ * @param {string} id - The target HTML section identifier.
+ */
 window.scrollToId = function(id) {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -55,56 +88,63 @@ window.scrollToId = function(id) {
     });
 };
 
+/**
+ * Updates interface component visibilities and badges for security clearance roles.
+ * @param {string} mode - The clearance mode name ('fan', 'volunteer', 'vip').
+ */
 window.activateClearanceMode = function(mode) {
     window.activeClearance = mode;
-    document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('active-plan'));
     
-    const badge = document.getElementById('clearanceIndicator');
-    const label = document.getElementById('clearanceLabel');
-    
-    const opsOverlay = document.getElementById('opsConsoleOverlay');
-    const alertsOverlay = document.getElementById('alertsOverlay');
+    const cards = document.querySelectorAll('.plan-card');
+    cards.forEach(card => {
+        card.classList.remove('active-plan');
+        card.setAttribute('aria-selected', 'false');
+    });
     
     if (mode === 'fan') {
         const fanCard = document.getElementById('planFan');
-        if (fanCard) fanCard.classList.add('active-plan');
-        if (label) label.textContent = "Fan View";
-        if (badge) {
-            badge.style.borderColor = 'rgba(59, 130, 246, 0.3)';
-            badge.style.color = 'var(--accent-cyan)';
+        if (fanCard) {
+            fanCard.classList.add('active-plan');
+            fanCard.setAttribute('aria-selected', 'true');
         }
-        // Lock sensitive views
-        if (opsOverlay) opsOverlay.classList.remove('hidden');
-        if (alertsOverlay) alertsOverlay.classList.remove('hidden');
+        if (DOM.clearanceLabel) DOM.clearanceLabel.textContent = "Fan View";
+        if (DOM.clearanceIndicator) {
+            DOM.clearanceIndicator.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+            DOM.clearanceIndicator.style.color = 'var(--accent-cyan)';
+        }
+        if (DOM.opsOverlay) DOM.opsOverlay.classList.remove('hidden');
+        if (DOM.alertsOverlay) DOM.alertsOverlay.classList.remove('hidden');
     } else if (mode === 'volunteer') {
         const volCard = document.getElementById('planVolunteer');
-        if (volCard) volCard.classList.add('active-plan');
-        if (label) label.textContent = "Volunteer Auth";
-        if (badge) {
-            badge.style.borderColor = 'rgba(139, 92, 246, 0.4)';
-            badge.style.color = 'var(--accent-purple)';
+        if (volCard) {
+            volCard.classList.add('active-plan');
+            volCard.setAttribute('aria-selected', 'true');
         }
-        // Unlock views
-        if (opsOverlay) opsOverlay.classList.add('hidden');
-        if (alertsOverlay) alertsOverlay.classList.add('hidden');
+        if (DOM.clearanceLabel) DOM.clearanceLabel.textContent = "Volunteer Auth";
+        if (DOM.clearanceIndicator) {
+            DOM.clearanceIndicator.style.borderColor = 'rgba(139, 92, 246, 0.4)';
+            DOM.clearanceIndicator.style.color = 'var(--accent-purple)';
+        }
+        if (DOM.opsOverlay) DOM.opsOverlay.classList.add('hidden');
+        if (DOM.alertsOverlay) DOM.alertsOverlay.classList.add('hidden');
         
-        // Refresh recommendation context
         if (typeof window.updateIncidentRecommendation === 'function') {
             window.updateIncidentRecommendation();
         }
     } else if (mode === 'vip') {
         const vipCard = document.getElementById('planVIP');
-        if (vipCard) vipCard.classList.add('active-plan');
-        if (label) label.textContent = "VIP Operator";
-        if (badge) {
-            badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-            badge.style.color = 'var(--success)';
+        if (vipCard) {
+            vipCard.classList.add('active-plan');
+            vipCard.setAttribute('aria-selected', 'true');
         }
-        // Unlock views
-        if (opsOverlay) opsOverlay.classList.add('hidden');
-        if (alertsOverlay) alertsOverlay.classList.add('hidden');
+        if (DOM.clearanceLabel) DOM.clearanceLabel.textContent = "VIP Operator";
+        if (DOM.clearanceIndicator) {
+            DOM.clearanceIndicator.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+            DOM.clearanceIndicator.style.color = 'var(--success)';
+        }
+        if (DOM.opsOverlay) DOM.opsOverlay.classList.add('hidden');
+        if (DOM.alertsOverlay) DOM.alertsOverlay.classList.add('hidden');
         
-        // Refresh recommendation context
         if (typeof window.updateIncidentRecommendation === 'function') {
             window.updateIncidentRecommendation();
         }
@@ -115,10 +155,12 @@ window.activateClearanceMode = function(mode) {
     }
 };
 
+/**
+ * Handles language switching, localizing text nodes using pure textContent for safety.
+ */
 window.switchLanguage = function() {
-    const langSelect = document.getElementById('langSelect');
-    if (!langSelect) return;
-    const lang = langSelect.value;
+    if (!DOM.langSelect) return;
+    const lang = DOM.langSelect.value;
     
     const t = window.langData ? window.langData[lang] : null;
     if (!t) return;
@@ -129,14 +171,13 @@ window.switchLanguage = function() {
             if (el.tagName === 'INPUT') {
                 el.placeholder = value;
             } else {
-                el.innerHTML = value;
+                el.textContent = value; // Secure textContent binding to prevent XSS
             }
         }
     }
     
-    const welcome = document.getElementById('welcomeMsg');
-    if (welcome) {
-        welcome.innerHTML = t.welcomeMsg;
+    if (DOM.welcomeMsg) {
+        DOM.welcomeMsg.textContent = t.welcomeMsg; // Secure textContent binding
     }
     
     if (window.addAlertLogEntry) {
@@ -144,19 +185,16 @@ window.switchLanguage = function() {
     }
 };
 
+/**
+ * Updates and animates the holographic wayfinding route path from selected Gates.
+ */
 window.animateSvgRoute = function() {
-    const startSelect = document.getElementById('routeStart');
-    const destSelect = document.getElementById('routeDest');
-    if (!startSelect || !destSelect) return;
+    if (!DOM.routeStart || !DOM.routeDest || !DOM.routePath || !DOM.routeTrack) return;
     
-    const start = startSelect.value;
-    const dest = destSelect.value;
+    const start = DOM.routeStart.value;
+    const dest = DOM.routeDest.value;
     
-    const path = document.getElementById('routePath');
-    const track = document.getElementById('routeTrack');
-    if (!path || !track) return;
-    
-    let dAttr = "M 30,80 L 120,80 L 180,30 L 350,30"; // default: Gate A to Sec 104
+    let dAttr = "M 30,80 L 120,80 L 180,30 L 350,30"; 
     
     if (start === 'B') {
         dAttr = "M 30,30 L 150,30 L 220,110 L 350,110";
@@ -170,11 +208,11 @@ window.animateSvgRoute = function() {
         dAttr = dAttr.replace(/L 350,(30|110|60)/, "L 350,70");
     }
 
-    path.setAttribute('d', dAttr);
-    track.setAttribute('d', dAttr);
+    DOM.routePath.setAttribute('d', dAttr);
+    DOM.routeTrack.setAttribute('d', dAttr);
     
-    document.getElementById('startLblText').textContent = `Gate ${start}`;
-    document.getElementById('destLblText').textContent = `Sec ${dest}`;
+    if (DOM.startLblText) DOM.startLblText.textContent = `Gate ${start}`;
+    if (DOM.destLblText) DOM.destLblText.textContent = `Sec ${dest}`;
     
     let distVal = 240;
     let timeVal = 4;
@@ -182,12 +220,12 @@ window.animateSvgRoute = function() {
     if (start === 'C') { distVal = 180; timeVal = 3; }
     if (dest === 'VIP') { distVal += 50; timeVal += 1; }
     
-    document.getElementById('valDistance').textContent = `${distVal} Meters`;
-    document.getElementById('valTime').textContent = `${timeVal} Mins`;
+    if (DOM.valDistance) DOM.valDistance.textContent = `${distVal} Meters`;
+    if (DOM.valTime) DOM.valTime.textContent = `${timeVal} Mins`;
     
-    path.style.animation = 'none';
-    path.offsetHeight; // trigger reflow
-    path.style.animation = 'flowRoute 2s infinite linear';
+    DOM.routePath.style.animation = 'none';
+    DOM.routePath.offsetHeight; 
+    DOM.routePath.style.animation = 'flowRoute 2s infinite linear';
     
     if (window.addAlertLogEntry) {
         window.addAlertLogEntry("GPS", `Recalculated route from Gate ${start} to Section ${dest}. Time: ${timeVal} min.`);
@@ -198,7 +236,9 @@ window.animateSvgRoute = function() {
     }
 };
 
-// Subtle Card Tilt (Parallax) Effect
+/**
+ * Initializes visual 3D tilt effects on cards.
+ */
 function init3DTilt() {
     const cards = document.querySelectorAll('.glass-card');
     cards.forEach(card => {
@@ -213,8 +253,8 @@ function init3DTilt() {
                     const xc = rect.width / 2;
                     const yc = rect.height / 2;
                     
-                    const rotateY = ((x - xc) / xc) * 3.5; // Subtle Y rotation (Max 3.5 deg)
-                    const rotateX = -((y - yc) / yc) * 3.5; // Subtle X rotation (Max 3.5 deg)
+                    const rotateY = ((x - xc) / xc) * 3.5; 
+                    const rotateX = -((y - yc) / yc) * 3.5; 
                     
                     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`;
                     ticking = false;
@@ -238,6 +278,9 @@ window.addEventListener('stadium-log', (e) => {
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize DOM element references cache
+    initDOMCache();
+
     // Event binding
     const enterBtn = document.getElementById('landingEnterBtn');
     if (enterBtn) {
@@ -272,23 +315,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const langSelect = document.getElementById('langSelect');
-    if (langSelect) {
-        langSelect.addEventListener('change', () => {
+    if (DOM.langSelect) {
+        DOM.langSelect.addEventListener('change', () => {
             window.switchLanguage();
         });
     }
 
-    const routeStart = document.getElementById('routeStart');
-    if (routeStart) {
-        routeStart.addEventListener('change', () => {
+    if (DOM.routeStart) {
+        DOM.routeStart.addEventListener('change', () => {
             window.animateSvgRoute();
         });
     }
 
-    const routeDest = document.getElementById('routeDest');
-    if (routeDest) {
-        routeDest.addEventListener('change', () => {
+    if (DOM.routeDest) {
+        DOM.routeDest.addEventListener('change', () => {
             window.animateSvgRoute();
         });
     }

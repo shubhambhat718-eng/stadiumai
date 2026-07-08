@@ -1,10 +1,32 @@
 "use strict";
 
+/**
+ * Global cache for Incident Command Center DOM elements.
+ * @type {Object<string, HTMLElement>}
+ */
+const DOM_INCIDENT = {};
+
+/**
+ * Initializes the DOM cache elements for the incident command dashboard.
+ */
+function initIncidentDOMCache() {
+    DOM_INCIDENT.actionActiveName = document.getElementById('actionActiveName');
+    DOM_INCIDENT.actionActiveDesc = document.getElementById('actionActiveDesc');
+    DOM_INCIDENT.actionActiveBtn = document.getElementById('actionActiveBtn');
+    DOM_INCIDENT.genaiRecommendationText = document.getElementById('genaiRecommendationText');
+    DOM_INCIDENT.commandGrid = document.getElementById('commandGrid');
+}
+
 let selectedBoxName = 'North Gate';
 let selectedBoxType = 'clear_queue';
 let selectedBoxDesc = 'Queue overflow > 15m. Reroute volunteers to Gate B.';
 let selectedBoxBtnText = 'Clear Queue';
 
+/**
+ * Logs incident commands to standard console or alert feeds.
+ * @param {string} source - Action origin (e.g. VIP ROOT, VOLUNTEER OP).
+ * @param {string} message - Operation event details.
+ */
 function logToConsole(source, message) {
     if (window.addAlertLogEntry) {
         window.addAlertLogEntry(source, message);
@@ -13,67 +35,81 @@ function logToConsole(source, message) {
     }
 }
 
+/**
+ * Activates console zone selection, toggling selections and caching options.
+ * @param {HTMLElement} el - Selected box element cell.
+ * @param {string} name - Zone name.
+ * @param {string} desc - Alert description.
+ * @param {string} actionType - Resolution identifier.
+ * @param {string} buttonText - Resolution button text.
+ */
 window.selectConsoleBox = function(el, name, desc, actionType, buttonText) {
-    document.querySelectorAll('.status-box').forEach(box => box.classList.remove('selected'));
+    const boxes = DOM_INCIDENT.commandGrid ? DOM_INCIDENT.commandGrid.querySelectorAll('.status-box') : [];
+    boxes.forEach(box => {
+        box.classList.remove('selected');
+        box.setAttribute('aria-selected', 'false'); // Accessibility selection update
+    });
+    
     el.classList.add('selected');
+    el.setAttribute('aria-selected', 'true');
     
     selectedBoxName = name;
     selectedBoxType = actionType;
     selectedBoxDesc = desc;
     selectedBoxBtnText = buttonText;
     
-    const nameEl = document.getElementById('actionActiveName');
-    if (nameEl) nameEl.textContent = name;
+    if (DOM_INCIDENT.actionActiveName) DOM_INCIDENT.actionActiveName.textContent = name;
+    if (DOM_INCIDENT.actionActiveDesc) DOM_INCIDENT.actionActiveDesc.textContent = desc;
     
-    const descEl = document.getElementById('actionActiveDesc');
-    if (descEl) descEl.textContent = desc;
-    
-    const actionBtn = document.getElementById('actionActiveBtn');
-    if (actionBtn) {
-        actionBtn.textContent = buttonText;
-        actionBtn.disabled = false;
+    if (DOM_INCIDENT.actionActiveBtn) {
+        DOM_INCIDENT.actionActiveBtn.textContent = buttonText;
+        DOM_INCIDENT.actionActiveBtn.disabled = false;
     }
 
     // Refresh GenAI recommendation
     window.updateIncidentRecommendation();
 };
 
+/**
+ * Executes operations command resolving protocol with clearance role checking.
+ */
 window.triggerConsoleAction = function() {
-    const btn = document.getElementById('actionActiveBtn');
-    if (!btn) return;
+    if (!DOM_INCIDENT.actionActiveBtn) return;
     
     // SECURITY ACCESS CONTROL & ROLE CHECK
     if (window.activeClearance === 'fan') {
         alert("Unauthorized Access: Fan accounts are blocked from triggering operations console actions.");
-        btn.textContent = "Failed (Unauthorized)";
+        DOM_INCIDENT.actionActiveBtn.textContent = "Failed (Unauthorized)";
         return;
     }
     
     const isVIPAction = (selectedBoxType === 'adjust_hvac' || selectedBoxType === 'check_sensors');
     if (isVIPAction && window.activeClearance !== 'vip') {
         alert(`Access Denied: Action [${selectedBoxBtnText}] requires VIP Command Clearance (Root Auth).`);
-        btn.textContent = "VIP Required 🔒";
+        DOM_INCIDENT.actionActiveBtn.textContent = "VIP Required 🔒";
         setTimeout(() => {
-            btn.textContent = selectedBoxBtnText;
-            btn.disabled = false;
+            if (DOM_INCIDENT.actionActiveBtn) {
+                DOM_INCIDENT.actionActiveBtn.textContent = selectedBoxBtnText;
+                DOM_INCIDENT.actionActiveBtn.disabled = false;
+            }
         }, 2000);
         return;
     }
     
-    btn.textContent = "Executing...";
-    btn.disabled = true;
+    DOM_INCIDENT.actionActiveBtn.textContent = "Executing...";
+    DOM_INCIDENT.actionActiveBtn.disabled = true;
     
     setTimeout(() => {
-        btn.textContent = "Complete ✅";
+        if (DOM_INCIDENT.actionActiveBtn) DOM_INCIDENT.actionActiveBtn.textContent = "Complete ✅";
         
-        // Log custom tag adapted to active clearance pass
         const sourceLabel = window.activeClearance === 'fan' ? "GUEST DISPATCH" : 
                             window.activeClearance === 'volunteer' ? "VOLUNTEER OP" : "VIP ROOT";
         
         logToConsole(sourceLabel, `Executed resolving protocol for [${selectedBoxName}] - Action: ${selectedBoxType.toUpperCase()}`);
         
         // Update status tag of the box to ok (Normal)
-        document.querySelectorAll('.status-box').forEach(box => {
+        const activeBoxes = DOM_INCIDENT.commandGrid ? DOM_INCIDENT.commandGrid.querySelectorAll('.status-box') : [];
+        activeBoxes.forEach(box => {
             const labelEl = box.querySelector('.status-box-lbl');
             if (labelEl && labelEl.textContent === selectedBoxName) {
                 const tag = box.querySelector('.status-tag');
@@ -85,17 +121,19 @@ window.triggerConsoleAction = function() {
         });
         
         setTimeout(() => {
-            btn.textContent = "Audit Logged";
+            if (DOM_INCIDENT.actionActiveBtn) DOM_INCIDENT.actionActiveBtn.textContent = "Audit Logged";
         }, 1500);
     }, 1000);
 };
 
+/**
+ * Updates GenAI Decision Support Recommendation card.
+ */
 window.updateIncidentRecommendation = function() {
-    const recText = document.getElementById('genaiRecommendationText');
-    if (!recText) return;
+    if (!DOM_INCIDENT.genaiRecommendationText) return;
     
     if (window.activeClearance === 'fan') {
-        recText.textContent = "Access Denied: Please authorize operations credentials.";
+        DOM_INCIDENT.genaiRecommendationText.textContent = "Access Denied: Please authorize operations credentials.";
         return;
     }
     
@@ -120,14 +158,16 @@ window.updateIncidentRecommendation = function() {
         rec = "Analyzing real-time stadium sensors... telemetry is nominal. Select an active incident zone to query operational recommendation.";
     }
     
-    recText.textContent = rec;
+    DOM_INCIDENT.genaiRecommendationText.textContent = rec;
 };
 
 // Bind elements on load
 document.addEventListener('DOMContentLoaded', () => {
-    const grid = document.getElementById('commandGrid');
-    if (grid) {
-        grid.querySelectorAll('.status-box').forEach(box => {
+    // Initialize element references
+    initIncidentDOMCache();
+
+    if (DOM_INCIDENT.commandGrid) {
+        DOM_INCIDENT.commandGrid.querySelectorAll('.status-box').forEach(box => {
             box.addEventListener('click', () => {
                 const name = box.getAttribute('data-name');
                 const desc = box.getAttribute('data-desc');
@@ -148,9 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const actionBtn = document.getElementById('actionActiveBtn');
-    if (actionBtn) {
-        actionBtn.addEventListener('click', () => {
+    if (DOM_INCIDENT.actionActiveBtn) {
+        DOM_INCIDENT.actionActiveBtn.addEventListener('click', () => {
             window.triggerConsoleAction();
         });
     }

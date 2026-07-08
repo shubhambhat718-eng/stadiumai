@@ -112,6 +112,7 @@
             <div class="clearance-badge" id="clearanceIndicator">
                 <i data-lucide="shield-check" aria-hidden="true"></i> <span id="clearanceLabel">Fan View</span>
             </div>
+            <label for="langSelect" class="sr-only">Select Language</label>
             <select class="lang-selector" id="langSelect" aria-label="Select Language">
                 <option value="en">🌐 English</option>
                 <option value="es">🇪🇸 Español</option>
@@ -130,7 +131,7 @@
                     <i data-lucide="activity" style="width: 14px; height: 14px;" aria-hidden="true"></i>
                     <span id="liveBadge">LIVE — FIFA WORLD CUP 2026</span>
                 </div>
-                <h1 id="heroTitle">GenAI Stadium<br>Operations Twin</h1>
+                <h1 id="heroTitle">GenAI Stadium Operations Twin</h1>
                 <p id="heroDesc">
                     Interactive real-time 3D control center for tournament venues. Powered by generative AI for predictive crowd density routing, multilingual fan support, adaptive accessibility controls, and carbon-neutral resource tracking.
                 </p>
@@ -315,11 +316,13 @@
                     </div>
                     <div class="nav-card-layout">
                         <div class="nav-controls">
+                            <label for="routeStart" class="sr-only">Route Start</label>
                             <select class="nav-select" id="routeStart" aria-label="Route Start">
                                 <option value="A">Gate A (Ground Level)</option>
                                 <option value="B">Gate B (North Concourse)</option>
                                 <option value="C">Gate C (South Ramp)</option>
                             </select>
+                            <label for="routeDest" class="sr-only">Route Destination</label>
                             <select class="nav-select" id="routeDest" aria-label="Route Destination">
                                 <option value="104">Seat 12A, Section 104 (Lower Tier)</option>
                                 <option value="208">Seat 4C, Section 208 (Upper Tier)</option>
@@ -386,6 +389,7 @@
                             <button class="suggested-chip" data-query="Tell me about the carbon offsets today.">🌱 Eco offsets</button>
                         </div>
                         <div class="chat-input-bar">
+                            <label for="chatInput" class="sr-only">Type a message</label>
                             <input type="text" id="chatInput" placeholder="Type a message (e.g. 'Where is restroom?')..." aria-label="Chat Input">
                             <button class="chat-send-btn" id="chatSendBtn" aria-label="Send Message">
                                 <i data-lucide="send" style="width:16px; height:16px;" aria-hidden="true"></i>
@@ -593,7 +597,7 @@
                 </div>
                 
                 <!-- CARD 6: Tournament Schedule (Problem Statement Alignment) -->
-                <div class="glass-card span-12" id="tournamentCard">
+                <div class="glass-card span-6" id="tournamentCard">
                     <div class="card-title-area">
                         <div class="card-label">
                             <h3 id="c6Title">Tournament Operations Schedule</h3>
@@ -638,6 +642,41 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <!-- CARD 7: GenAI Predictions (Problem Statement Alignment) -->
+                <div class="glass-card span-6" id="genaiPredictionsCard">
+                    <div class="card-title-area">
+                        <div class="card-label">
+                            <h3 id="predTitle">GenAI Operations Forecast</h3>
+                            <span id="predDesc">Predictive modeling for stadium resources</span>
+                        </div>
+                        <div class="card-icon-glow">
+                            <i data-lucide="sparkles" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="predictions-panel-wrap" style="display: flex; flex-direction: column; gap: 1.25rem; height: 100%; justify-content: center; padding: 0.5rem 0;">
+                        <div style="display: flex; gap: 1rem; justify-content: space-between;">
+                            <div style="flex: 1; padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; display: flex; flex-direction: column; gap: 0.25rem;">
+                                <span style="font-size: 0.75rem; color: var(--text-secondary);" id="lblPredCon">Concession wait forecast</span>
+                                <span style="font-size: 0.95rem; font-weight: 700; color: var(--accent-cyan);" id="valPredCon">Section 104: 4m (Normal)</span>
+                            </div>
+                            <div style="flex: 1; padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; display: flex; flex-direction: column; gap: 0.25rem;">
+                                <span style="font-size: 0.75rem; color: var(--text-secondary);" id="lblPredHvac">HVAC target status</span>
+                                <span style="font-size: 0.95rem; font-weight: 700; color: var(--success);" id="valPredHvac">Sec 208 Cooling: Nominal</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; justify-content: space-between;">
+                            <div style="flex: 1; padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; display: flex; flex-direction: column; gap: 0.25rem;">
+                                <span style="font-size: 0.75rem; color: var(--text-secondary);" id="lblPredEco">Carbon offsets peak</span>
+                                <span style="font-size: 0.95rem; font-weight: 700; color: var(--accent-purple);" id="valPredEco">Est. Peak today: 1.4 Tons CO₂</span>
+                            </div>
+                            <div style="flex: 1; padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; display: flex; flex-direction: column; gap: 0.25rem;">
+                                <span style="font-size: 0.75rem; color: var(--text-secondary);" id="lblPredTransit">Shuttle delay forecast</span>
+                                <span style="font-size: 0.95rem; font-weight: 700; color: var(--warning);" id="valPredTransit">Bus B1: Delay to 6m</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

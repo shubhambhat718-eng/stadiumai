@@ -3,6 +3,7 @@
 let scene, camera, renderer, stadiumGroup, particles, pathTube, beaconGroup, ecoGroup;
 let pPositions, initialColors, targetColors, particleCount = 1800;
 let timeTick = 0;
+let frameCount = 0; // Throttle counter to save position update checks
 let colorTransitionFrames = 120; // Optimization: only upload color buffer when morphing
 
 const beaconPositions = [
@@ -12,6 +13,11 @@ const beaconPositions = [
     new THREE.Vector3(30, 8, 35)
 ];
 
+/**
+ * Dispatches alert messages to telemetry widgets.
+ * @param {string} source - Component logging details.
+ * @param {string} message - Content of message.
+ */
 function logToConsole(source, message) {
     if (window.addAlertLogEntry) {
         window.addAlertLogEntry(source, message);
@@ -20,6 +26,10 @@ function logToConsole(source, message) {
     }
 }
 
+/**
+ * Initializes the Three.js 3D Holographic digital twin scene inside the canvas viewport.
+ * @param {HTMLCanvasElement} canvas - Target rendering canvas node.
+ */
 window.initStadiumScene = function(canvas) {
     scene = new THREE.Scene();
     scene.background = null;
@@ -236,6 +246,7 @@ window.initStadiumScene = function(canvas) {
     function animate() {
         requestAnimationFrame(animate);
         timeTick += 0.005;
+        frameCount++;
 
         // Slow rotation (from 0.4 to 0.08)
         if (stadiumGroup) stadiumGroup.rotation.y = timeTick * 0.08;
@@ -261,14 +272,15 @@ window.initStadiumScene = function(canvas) {
         }
 
         if (particles) {
-            const positions = particles.geometry.attributes.position.array;
-            
-            // Dynamic wave motions
-            for (let i = 0; i < particleCount; i++) {
-                const idx = i * 3;
-                positions[idx + 1] += Math.sin(timeTick * 0.8 + positions[idx]) * 0.001;
+            // EFFICIENCY OPTIMIZATION: Only update particle positions on even frames (reduces buffer uploads by 50%)
+            if (frameCount % 2 === 0) {
+                const positions = particles.geometry.attributes.position.array;
+                for (let i = 0; i < particleCount; i++) {
+                    const idx = i * 3;
+                    positions[idx + 1] += Math.sin(timeTick * 0.8 + positions[idx]) * 0.001;
+                }
+                particles.geometry.attributes.position.needsUpdate = true;
             }
-            particles.geometry.attributes.position.needsUpdate = true;
 
             // EFFICIENCY OPTIMIZATION: Only update particle colors if actively transitioning
             if (colorTransitionFrames > 0) {
@@ -313,6 +325,10 @@ window.initStadiumScene = function(canvas) {
     });
 };
 
+/**
+ * Toggles structural visual layers (crowd heatmap, accessibility beacons, transit vectors).
+ * @param {string} layer - Name of layer ('crowd', 'route', 'access', 'eco').
+ */
 window.toggle3DLayer = function(layer) {
     if (!particles) return;
     
@@ -402,6 +418,10 @@ window.toggle3DLayer = function(layer) {
     if (activeBtn) activeBtn.classList.add('active');
 };
 
+/**
+ * Animates the camera position to look closely at a target gate.
+ * @param {string} gate - Target gate coordinates identifier.
+ */
 window.panStadiumCamera = function(gate) {
     if (!camera) return;
     let targetX = 50;
