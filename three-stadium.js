@@ -1,3 +1,5 @@
+"use strict";
+
 let scene, camera, renderer, stadiumGroup, particles, pathTube, beaconGroup, ecoGroup;
 let pPositions, initialColors, targetColors, particleCount = 1800;
 let timeTick = 0;
@@ -280,14 +282,21 @@ window.initStadiumScene = function(canvas) {
 
     animate();
 
-    // Mouse movement
+    // Mouse movement with requestAnimationFrame throttle for efficiency
+    let ticking = false;
     canvas.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        const mouseY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-        camera.position.x += (mouseX * 0.2); // Slower camera tracking
-        camera.position.y += (mouseY * 0.15);
-        camera.lookAt(0, 0, 0);
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                const mouseY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                camera.position.x += (mouseX * 0.2); // Slower camera tracking
+                camera.position.y += (mouseY * 0.15);
+                camera.lookAt(0, 0, 0);
+                ticking = false;
+            });
+            ticking = true;
+        }
     });
 
     window.addEventListener('resize', () => {

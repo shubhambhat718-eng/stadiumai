@@ -1,3 +1,5 @@
+"use strict";
+
 // Landing Page Transition
 window.enterMainProject = function() {
     const landingPage = document.getElementById('landingPage');
@@ -179,18 +181,25 @@ window.animateSvgRoute = function() {
 function init3DTilt() {
     const cards = document.querySelectorAll('.glass-card');
     cards.forEach(card => {
+        let ticking = false;
         card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const xc = rect.width / 2;
-            const yc = rect.height / 2;
-            
-            const rotateY = ((x - xc) / xc) * 3.5; // Subtle Y rotation (Max 3.5 deg)
-            const rotateX = -((y - yc) / yc) * 3.5; // Subtle X rotation (Max 3.5 deg)
-            
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`;
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const xc = rect.width / 2;
+                    const yc = rect.height / 2;
+                    
+                    const rotateY = ((x - xc) / xc) * 3.5; // Subtle Y rotation (Max 3.5 deg)
+                    const rotateX = -((y - yc) / yc) * 3.5; // Subtle X rotation (Max 3.5 deg)
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`;
+                    ticking = false;
+                });
+                ticking = true;
+            }
         });
         
         card.addEventListener('mouseleave', () => {

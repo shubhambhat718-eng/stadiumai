@@ -1,3 +1,5 @@
+"use strict";
+
 const botAnswers = {
     en: {
         elevator: '♿ The nearest handicap elevators are situated at Gate A (ground level, behind Section 100) and at the VIP entrance (North-West wing). Priority access is active.',
@@ -22,9 +24,59 @@ const botAnswers = {
     }
 };
 
+/**
+ * Escapes HTML characters to prevent XSS vulnerabilities.
+ * @param {string} str - The string to sanitize.
+ * @returns {string} - The sanitized string.
+ */
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, 
+        tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[tag] || tag)
+    );
+}
+
+/**
+ * Retrieves the appropriate AI response based on the user's intent.
+ * @param {string} query - The user query.
+ * @param {string} lang - The selected language code.
+ * @returns {string} - The localized response.
+ */
+function getBotResponse(query, lang) {
+    query = query.toLowerCase();
+    const dict = botAnswers[lang] || botAnswers['en'];
+    
+    if (query.includes('elevator') || query.includes('wheelchair') || query.includes('access') || query.includes('ascensor') || query.includes('handicap')) {
+        return dict.elevator;
+    } else if (query.includes('vegan') || query.includes('food') || query.includes('eat') || query.includes('comida') || query.includes('nourriture')) {
+        return dict.vegan;
+    } else if (query.includes('shuttle') || query.includes('bus') || query.includes('transit') || query.includes('traslado') || query.includes('navette')) {
+        return dict.shuttle;
+    } else if (query.includes('eco') || query.includes('solar') || query.includes('carbon') || query.includes('green') || query.includes('sostenible') || query.includes('sol')) {
+        return dict.eco;
+    } else if (query.includes('gate') || query.includes('puerta') || query.includes('porte')) {
+        return dict.gate;
+    } else if (query.includes('hello') || query.includes('hi') || query.includes('hola') || query.includes('bonjour')) {
+        return lang === 'es' ? '¡Hola! ¿Cómo puedo ayudarte hoy con la Copa del Mundo?' : 
+                lang === 'fr' ? 'Bonjour! Comment puis-je vous aider aujourd\'hui?' :
+                'Hello! How can I assist you today with the World Cup operations?';
+    }
+    
+    return "I'm processing your request with StadiumAI generative sensors. Based on real-time stadium metrics, everything is nominal. Please let me know if you need specific elevator mappings, eco grids, or bus timetables.";
+}
+
 function appendMessage(sender, text, isAI) {
     const container = document.getElementById('chatContainer');
     if (!container) return;
+
+    // Secure the input
+    const sanitizedText = escapeHTML(text);
 
     const bubble = document.createElement('div');
     bubble.className = `chat-bubble ${isAI ? 'ai' : 'user'}`;
@@ -34,7 +86,7 @@ function appendMessage(sender, text, isAI) {
             <i data-lucide="${isAI ? 'sparkles' : 'user'}" style="width:14px; height:14px;"></i>
         </div>
         <div class="chat-text-bubble">
-            <strong>${sender}:</strong> ${text.replace(/\n/g, '<br>')}
+            <strong>${escapeHTML(sender)}:</strong> ${sanitizedText.replace(/\n/g, '<br>')}
         </div>
     `;
     
@@ -69,27 +121,12 @@ window.handleSendChat = function() {
     
     // AI Response Simulation
     setTimeout(() => {
-        let reply = "I'm processing your request with StadiumAI generative sensors. Based on real-time stadium metrics, everything is nominal. Please let me know if you need specific elevator mappings, eco grids, or bus timetables.";
-        
-        const query = text.toLowerCase();
-        const dict = botAnswers[lang] || botAnswers['en'];
-        
-        if (query.includes('elevator') || query.includes('wheelchair') || query.includes('access') || query.includes('ascensor') || query.includes('handicap')) {
-            reply = dict.elevator;
-        } else if (query.includes('vegan') || query.includes('food') || query.includes('eat') || query.includes('comida') || query.includes('nourriture')) {
-            reply = dict.vegan;
-        } else if (query.includes('shuttle') || query.includes('bus') || query.includes('transit') || query.includes('traslado') || query.includes('navette')) {
-            reply = dict.shuttle;
-        } else if (query.includes('eco') || query.includes('solar') || query.includes('carbon') || query.includes('green') || query.includes('sostenible') || query.includes('sol')) {
-            reply = dict.eco;
-        } else if (query.includes('gate') || query.includes('puerta') || query.includes('porte')) {
-            reply = dict.gate;
-        } else if (query.includes('hello') || query.includes('hi') || query.includes('hola') || query.includes('bonjour')) {
-            reply = lang === 'es' ? '¡Hola! ¿Cómo puedo ayudarte hoy con la Copa del Mundo?' : 
-                    lang === 'fr' ? 'Bonjour! Comment puis-je vous aider aujourd\'hui?' :
-                    'Hello! How can I assist you today with the World Cup operations?';
-        }
-        
+        const reply = getBotResponse(text, lang);
         appendMessage("StadiumAI", reply, true);
     }, 750);
 };
+
+// Export for testing
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { escapeHTML, getBotResponse, botAnswers };
+}

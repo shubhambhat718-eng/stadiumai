@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:;">
     <title>StadiumAI — GenAI-Powered FIFA World Cup 2026 Operations</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     
@@ -111,7 +112,7 @@
             <div class="clearance-badge" id="clearanceIndicator">
                 <i data-lucide="shield-check"></i> <span id="clearanceLabel">Fan View</span>
             </div>
-            <select class="lang-selector" id="langSelect" onchange="switchLanguage()">
+            <select class="lang-selector" id="langSelect" onchange="switchLanguage()" aria-label="Select Language">
                 <option value="en">🌐 English</option>
                 <option value="es">🇪🇸 Español</option>
                 <option value="fr">🇫🇷 Français</option>
@@ -378,15 +379,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="chat-suggested-chips">
-                            <span class="suggested-chip" onclick="handleChipClick('Where is the nearest wheelchair elevator?')">♿ Access lift</span>
-                            <span class="suggested-chip" onclick="handleChipClick('What are the vegan food options nearby?')">🍔 Vegan food</span>
-                            <span class="suggested-chip" onclick="handleChipClick('When is the next shuttle bus leaving?')">🚌 Shuttle bus</span>
-                            <span class="suggested-chip" onclick="handleChipClick('Tell me about the carbon offsets today.')">🌱 Eco offsets</span>
+                        <div class="chat-suggested-chips" role="group" aria-label="Suggested Queries">
+                            <button class="suggested-chip" onclick="handleChipClick('Where is the nearest wheelchair elevator?')">♿ Access lift</button>
+                            <button class="suggested-chip" onclick="handleChipClick('What are the vegan food options nearby?')">🍔 Vegan food</button>
+                            <button class="suggested-chip" onclick="handleChipClick('When is the next shuttle bus leaving?')">🚌 Shuttle bus</button>
+                            <button class="suggested-chip" onclick="handleChipClick('Tell me about the carbon offsets today.')">🌱 Eco offsets</button>
                         </div>
                         <div class="chat-input-bar">
-                            <input type="text" id="chatInput" placeholder="Type a message (e.g. 'Where is restroom?')..." onkeydown="if(event.key === 'Enter') handleSendChat()">
-                            <button class="chat-send-btn" onclick="handleSendChat()">
+                            <input type="text" id="chatInput" placeholder="Type a message (e.g. 'Where is restroom?')..." onkeydown="if(event.key === 'Enter') handleSendChat()" aria-label="Chat Input">
+                            <button class="chat-send-btn" onclick="handleSendChat()" aria-label="Send Message">
                                 <i data-lucide="send" style="width:16px; height:16px;"></i>
                             </button>
                         </div>
@@ -568,6 +569,55 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- CARD 6: Tournament Schedule (Problem Statement Alignment) -->
+                <div class="glass-card span-12" id="tournamentCard">
+                    <div class="card-title-area">
+                        <div class="card-label">
+                            <h3 id="c6Title">Tournament Operations Schedule</h3>
+                            <span id="c6Desc">Upcoming matches and logistical assignments</span>
+                        </div>
+                        <div class="card-icon-glow">
+                            <i data-lucide="calendar"></i>
+                        </div>
+                    </div>
+                    <div class="tournament-bracket-wrap">
+                        <table class="schedule-table" aria-label="Match Schedule">
+                            <thead>
+                                <tr>
+                                    <th>Match Date</th>
+                                    <th>Teams</th>
+                                    <th>Stage</th>
+                                    <th>Expected Attendance</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Today, 14:00</td>
+                                    <td>USA 🇺🇸 vs 🇧🇷 BRA</td>
+                                    <td>Group Stage</td>
+                                    <td>80,000 (Sold Out)</td>
+                                    <td><span class="status-tag ok">LIVE</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Tomorrow, 18:30</td>
+                                    <td>FRA 🇫🇷 vs 🇦🇷 ARG</td>
+                                    <td>Group Stage</td>
+                                    <td>78,500 (High)</td>
+                                    <td><span class="status-tag warn">Prep Phase</span></td>
+                                </tr>
+                                <tr>
+                                    <td>June 28, 20:00</td>
+                                    <td>ESP 🇪🇸 vs 🇲🇽 MEX</td>
+                                    <td>Round of 16</td>
+                                    <td>80,000 (Sold Out)</td>
+                                    <td><span class="status-tag info">Scheduled</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
             </div>
         </section>
@@ -690,11 +740,11 @@
     </div><!-- End Main Project -->
 
     <!-- Sequential Global Scope Script Loading -->
-    <script src="translations.js?v=3"></script>
-    <script src="three-stadium.js?v=3"></script>
-    <script src="chat-assistant.js?v=3"></script>
-    <script src="incident-manager.js?v=3"></script>
-    <script src="telemetry-sim.js?v=3"></script>
-    <script src="app.js?v=3"></script>
+    <script src="translations.js?v=3" defer></script>
+    <script src="three-stadium.js?v=3" defer></script>
+    <script src="chat-assistant.js?v=3" defer></script>
+    <script src="incident-manager.js?v=3" defer></script>
+    <script src="telemetry-sim.js?v=3" defer></script>
+    <script src="app.js?v=3" defer></script>
 </body>
 </html>

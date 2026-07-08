@@ -1988,41 +1988,90 @@ body {
     flex-shrink: 0;
 }
 
-.plan-feature-item.disabled-feat {
-    opacity: 0.35;
+.plan-feature-item i {
+    width: 16px;
+    height: 16px;
+    color: var(--accent-cyan);
 }
 
-.plan-feature-item.disabled-feat i {
+.disabled-feat {
+    opacity: 0.4;
+}
+
+.disabled-feat i {
     color: var(--text-secondary);
 }
 
 /* Footer */
 .footer {
+    padding: 3rem 4rem;
     text-align: center;
-    padding: 4rem 2rem;
-    color: var(--text-secondary);
-    font-size: 0.82rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.025);
-    background: rgba(3, 3, 8, 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(4, 4, 13, 0.5);
+    margin-top: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
 .footer-logo {
     font-family: 'Outfit', sans-serif;
-    font-weight: 800;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
+    font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 0.75rem;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
 }
 
 .footer p {
-    margin-top: 0.5rem;
-    opacity: 0.5;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    line-height: 1.6;
+}
+
+/* Tournament Schedule Table */
+.tournament-bracket-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.schedule-table th {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.schedule-table td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.schedule-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.span-12 {
+    grid-column: span 12;
+}
+
+/* Accessibility Focus States */
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
 }
 
 /* Responsive Breakpoints */

@@ -47,7 +47,9 @@ graph TD;
 
 5. **Incident Command Console**: Interactive grid panel monitoring 8 stadium zones. Enables volunteer dispatches and remote HVAC cooling unit overrides.
 
-6. **Security Clearance Viewports**: Dynamically adjusts interface access levels and permissions:
+6. **Tournament Schedule & Operations**: Displays a live match bracket with expected attendance figures and real-time statuses to ensure comprehensive **Tournament Operations** oversight.
+
+7. **Security Clearance Viewports**: Dynamically adjusts interface access levels and permissions:
    - **Fan View**: standard seat wayfinding, food preorder, transit timetables, and chatbot.
    - **Volunteer View**: adds live incident logs, queue alarms, and crowd density alerts.
    - **Command VIP View**: grants administrative access to remote HVAC controls, field dispatches, grid audits, and DB telemetry feeds.
