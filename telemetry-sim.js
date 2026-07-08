@@ -19,13 +19,27 @@ window.addAlertLogEntry = function(source, message) {
     
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     
-    entry.innerHTML = `
-        <div class="alert-meta">
-            <span class="alert-time">${time}</span>
-            <span class="alert-badge-icon" style="color:var(--accent-cyan)">🛜 ${source}</span>
-        </div>
-        <div class="alert-msg-text">${message}</div>
-    `;
+    const meta = document.createElement('div');
+    meta.className = 'alert-meta';
+    
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'alert-time';
+    timeSpan.textContent = time;
+    
+    const badgeSpan = document.createElement('span');
+    badgeSpan.className = 'alert-badge-icon';
+    badgeSpan.style.color = 'var(--accent-cyan)';
+    badgeSpan.textContent = '🛜 ' + source;
+    
+    meta.appendChild(timeSpan);
+    meta.appendChild(badgeSpan);
+    
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'alert-msg-text';
+    msgDiv.textContent = message;
+    
+    entry.appendChild(meta);
+    entry.appendChild(msgDiv);
     
     container.prepend(entry);
 };

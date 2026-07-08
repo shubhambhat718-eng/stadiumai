@@ -135,10 +135,10 @@
                     Interactive real-time 3D control center for tournament venues. Powered by generative AI for predictive crowd density routing, multilingual fan support, adaptive accessibility controls, and carbon-neutral resource tracking.
                 </p>
                 <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="scrollToId('dashboard')">
+                    <button class="btn btn-primary" onclick="scrollToId('dashboard')" aria-label="Go to Control Dashboard">
                         <i data-lucide="layout-dashboard"></i> <span id="btnDash">Control Dashboard</span>
                     </button>
-                    <button class="btn btn-secondary" onclick="scrollToId('ai-concierge')">
+                    <button class="btn btn-secondary" onclick="scrollToId('ai-concierge')" aria-label="Go to AI Concierge">
                         <i data-lucide="message-square"></i> <span id="btnChat">Ask AI Concierge</span>
                     </button>
                 </div>
@@ -164,17 +164,17 @@
                         </div>
 
                         <!-- 3D Layer triggers -->
-                        <div class="hud-layer-controls">
-                            <button class="layer-btn active" id="layerBtnCrowd" onclick="toggle3DLayer('crowd')">
+                        <div class="hud-layer-controls" role="group" aria-label="3D Layers">
+                            <button class="layer-btn active" id="layerBtnCrowd" onclick="toggle3DLayer('crowd')" aria-label="Toggle Crowd Layer">
                                 <i data-lucide="users" style="width:12px; height:12px;"></i> Crowd
                             </button>
-                            <button class="layer-btn" id="layerBtnRoute" onclick="toggle3DLayer('route')">
+                            <button class="layer-btn" id="layerBtnRoute" onclick="toggle3DLayer('route')" aria-label="Toggle Route Layer">
                                 <i data-lucide="milestone" style="width:12px; height:12px;"></i> Path
                             </button>
-                            <button class="layer-btn" id="layerBtnAccess" onclick="toggle3DLayer('access')">
+                            <button class="layer-btn" id="layerBtnAccess" onclick="toggle3DLayer('access')" aria-label="Toggle Access Layer">
                                 <i data-lucide="accessibility" style="width:12px; height:12px;"></i> Access
                             </button>
-                            <button class="layer-btn" id="layerBtnEco" onclick="toggle3DLayer('eco')">
+                            <button class="layer-btn" id="layerBtnEco" onclick="toggle3DLayer('eco')" aria-label="Toggle Eco-Grid Layer">
                                 <i data-lucide="leaf" style="width:12px; height:12px;"></i> Eco-Grid
                             </button>
                         </div>
@@ -315,12 +315,12 @@
                     </div>
                     <div class="nav-card-layout">
                         <div class="nav-controls">
-                            <select class="nav-select" id="routeStart" onchange="animateSvgRoute()">
+                            <select class="nav-select" id="routeStart" onchange="animateSvgRoute()" aria-label="Route Start">
                                 <option value="A">Gate A (Ground Level)</option>
                                 <option value="B">Gate B (North Concourse)</option>
                                 <option value="C">Gate C (South Ramp)</option>
                             </select>
-                            <select class="nav-select" id="routeDest" onchange="animateSvgRoute()">
+                            <select class="nav-select" id="routeDest" onchange="animateSvgRoute()" aria-label="Route Destination">
                                 <option value="104">Seat 12A, Section 104 (Lower Tier)</option>
                                 <option value="208">Seat 4C, Section 208 (Upper Tier)</option>
                                 <option value="VIP">Executive Suite 12 (Club Level)</option>
@@ -479,7 +479,7 @@
                                 <span class="action-details-title" id="actionActiveName">North Gate</span>
                                 <span class="action-details-desc" id="actionActiveDesc">Queue overflow > 15m. Reroute volunteers to Gate B.</span>
                             </div>
-                            <button class="action-btn" id="actionActiveBtn" onclick="triggerConsoleAction()">Clear Queue</button>
+                            <button class="action-btn" id="actionActiveBtn" onclick="triggerConsoleAction()" aria-label="Trigger Action">Clear Queue</button>
                         </div>
                     </div>
                 </div>
@@ -677,11 +677,11 @@
             <div class="plans-grid">
                 
                 <!-- Fan Pass -->
-                <div class="plan-card active-plan" id="planFan" onclick="activateClearanceMode('fan')">
+                <div class="plan-card active-plan" id="planFan" onclick="activateClearanceMode('fan')" role="button" tabindex="0" aria-label="Select Fan Pass">
                     <span class="plan-name" id="p1Name">Fan Access Pass</span>
                     <span class="plan-subtitle" id="p1Sub">For match ticket holders</span>
                     <div class="plan-cost">$0<span>/ Match</span></div>
-                    <button class="plan-btn" id="p1Btn">Active View</button>
+                    <button class="plan-btn" id="p1Btn" tabindex="-1">Active View</button>
                     <ul class="plan-features-list">
                         <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pf1">3D Seat Wayfinding</span></li>
                         <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pf2">AI Concierge chatbot</span></li>
@@ -693,11 +693,11 @@
                 </div>
 
                 <!-- Volunteer Pass -->
-                <div class="plan-card" id="planVolunteer" onclick="activateClearanceMode('volunteer')">
+                <div class="plan-card" id="planVolunteer" onclick="activateClearanceMode('volunteer')" role="button" tabindex="0" aria-label="Select Volunteer Pass">
                     <span class="plan-name" id="p2Name">Volunteer Credentials</span>
                     <span class="plan-subtitle" id="p2Sub">For operations & guide volunteers</span>
                     <div class="plan-cost">Level 1<span>/ Auth</span></div>
-                    <button class="plan-btn" id="p2Btn">Authorize</button>
+                    <button class="plan-btn" id="p2Btn" tabindex="-1">Authorize</button>
                     <ul class="plan-features-list">
                         <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfV1">Access to all Fan services</span></li>
                         <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfV2">Crowd bottleneck reporting</span></li>
@@ -709,11 +709,11 @@
                 </div>
 
                 <!-- VIP Command Center -->
-                <div class="plan-card" id="planVIP" onclick="activateClearanceMode('vip')">
+                <div class="plan-card" id="planVIP" onclick="activateClearanceMode('vip')" role="button" tabindex="0" aria-label="Select VIP Pass">
                     <span class="plan-name" id="p3Name">Command VIP Console</span>
                     <span class="plan-subtitle" id="p3Sub">For stadium directors & coordinators</span>
                     <div class="plan-cost">VIP Admin<span>/ Root</span></div>
-                    <button class="plan-btn" id="p3Btn">Grant Root</button>
+                    <button class="plan-btn" id="p3Btn" tabindex="-1">Grant Root</button>
                     <ul class="plan-features-list">
                         <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfVIP1">Complete stadium controls</span></li>
                         <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfVIP2">Remote HVAC recalibration</span></li>

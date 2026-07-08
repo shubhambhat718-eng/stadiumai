@@ -53,14 +53,17 @@ function getBotResponse(query, lang) {
     const dict = botAnswers[lang] || botAnswers['en'];
     
     if (query.includes('elevator') || query.includes('wheelchair') || query.includes('access') || query.includes('ascensor') || query.includes('handicap')) {
+        if (window.toggle3DLayer) window.toggle3DLayer('access');
         return dict.elevator;
     } else if (query.includes('vegan') || query.includes('food') || query.includes('eat') || query.includes('comida') || query.includes('nourriture')) {
         return dict.vegan;
     } else if (query.includes('shuttle') || query.includes('bus') || query.includes('transit') || query.includes('traslado') || query.includes('navette')) {
         return dict.shuttle;
     } else if (query.includes('eco') || query.includes('solar') || query.includes('carbon') || query.includes('green') || query.includes('sostenible') || query.includes('sol')) {
+        if (window.toggle3DLayer) window.toggle3DLayer('eco');
         return dict.eco;
     } else if (query.includes('gate') || query.includes('puerta') || query.includes('porte')) {
+        if (window.panStadiumCamera) window.panStadiumCamera('B');
         return dict.gate;
     } else if (query.includes('hello') || query.includes('hi') || query.includes('hola') || query.includes('bonjour')) {
         return lang === 'es' ? '¡Hola! ¿Cómo puedo ayudarte hoy con la Copa del Mundo?' : 
@@ -81,14 +84,31 @@ function appendMessage(sender, text, isAI) {
     const bubble = document.createElement('div');
     bubble.className = `chat-bubble ${isAI ? 'ai' : 'user'}`;
     
-    bubble.innerHTML = `
-        <div class="chat-avatar ${isAI ? 'ai' : 'user'}">
-            <i data-lucide="${isAI ? 'sparkles' : 'user'}" style="width:14px; height:14px;"></i>
-        </div>
-        <div class="chat-text-bubble">
-            <strong>${escapeHTML(sender)}:</strong> ${sanitizedText.replace(/\n/g, '<br>')}
-        </div>
-    `;
+    const avatarDiv = document.createElement('div');
+    avatarDiv.className = `chat-avatar ${isAI ? 'ai' : 'user'}`;
+    const icon = document.createElement('i');
+    icon.setAttribute('data-lucide', isAI ? 'sparkles' : 'user');
+    icon.style.width = '14px';
+    icon.style.height = '14px';
+    avatarDiv.appendChild(icon);
+
+    const textBubble = document.createElement('div');
+    textBubble.className = 'chat-text-bubble';
+    
+    const strong = document.createElement('strong');
+    strong.textContent = escapeHTML(sender) + ': ';
+    textBubble.appendChild(strong);
+    
+    const lines = sanitizedText.split('\n');
+    lines.forEach((line, index) => {
+        textBubble.appendChild(document.createTextNode(line));
+        if (index < lines.length - 1) {
+            textBubble.appendChild(document.createElement('br'));
+        }
+    });
+
+    bubble.appendChild(avatarDiv);
+    bubble.appendChild(textBubble);
     
     container.appendChild(bubble);
     container.scrollTop = container.scrollHeight;
