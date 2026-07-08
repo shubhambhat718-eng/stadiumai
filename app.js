@@ -49,7 +49,7 @@ window.scrollToId = function(id) {
     
     document.querySelectorAll('.nav-link').forEach(link => {
         link.classList.remove('active');
-        if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(id)) {
+        if (link.getAttribute('data-target') === id) {
             link.classList.add('active');
         }
     });
@@ -62,7 +62,9 @@ window.activateClearanceMode = function(mode) {
     const badge = document.getElementById('clearanceIndicator');
     const label = document.getElementById('clearanceLabel');
     
-    // Ops console card is kept fully active/functional in all states. We only update status labels.
+    const opsOverlay = document.getElementById('opsConsoleOverlay');
+    const alertsOverlay = document.getElementById('alertsOverlay');
+    
     if (mode === 'fan') {
         const fanCard = document.getElementById('planFan');
         if (fanCard) fanCard.classList.add('active-plan');
@@ -71,6 +73,9 @@ window.activateClearanceMode = function(mode) {
             badge.style.borderColor = 'rgba(59, 130, 246, 0.3)';
             badge.style.color = 'var(--accent-cyan)';
         }
+        // Lock sensitive views
+        if (opsOverlay) opsOverlay.classList.remove('hidden');
+        if (alertsOverlay) alertsOverlay.classList.remove('hidden');
     } else if (mode === 'volunteer') {
         const volCard = document.getElementById('planVolunteer');
         if (volCard) volCard.classList.add('active-plan');
@@ -79,6 +84,14 @@ window.activateClearanceMode = function(mode) {
             badge.style.borderColor = 'rgba(139, 92, 246, 0.4)';
             badge.style.color = 'var(--accent-purple)';
         }
+        // Unlock views
+        if (opsOverlay) opsOverlay.classList.add('hidden');
+        if (alertsOverlay) alertsOverlay.classList.add('hidden');
+        
+        // Refresh recommendation context
+        if (typeof window.updateIncidentRecommendation === 'function') {
+            window.updateIncidentRecommendation();
+        }
     } else if (mode === 'vip') {
         const vipCard = document.getElementById('planVIP');
         if (vipCard) vipCard.classList.add('active-plan');
@@ -86,6 +99,14 @@ window.activateClearanceMode = function(mode) {
         if (badge) {
             badge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
             badge.style.color = 'var(--success)';
+        }
+        // Unlock views
+        if (opsOverlay) opsOverlay.classList.add('hidden');
+        if (alertsOverlay) alertsOverlay.classList.add('hidden');
+        
+        // Refresh recommendation context
+        if (typeof window.updateIncidentRecommendation === 'function') {
+            window.updateIncidentRecommendation();
         }
     }
     
@@ -208,15 +229,99 @@ function init3DTilt() {
     });
 }
 
-
-
 // Connect custom events from three-stadium module to telemetry alerts container
 window.addEventListener('stadium-log', (e) => {
-    addAlertLogEntry(e.detail.source, e.detail.message);
+    if (window.addAlertLogEntry) {
+        window.addAlertLogEntry(e.detail.source, e.detail.message);
+    }
 });
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
+    // Event binding
+    const enterBtn = document.getElementById('landingEnterBtn');
+    if (enterBtn) {
+        enterBtn.addEventListener('click', () => {
+            window.enterMainProject();
+        });
+    }
+
+    const navbarLinks = document.getElementById('navbarLinks');
+    if (navbarLinks) {
+        navbarLinks.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const target = link.getAttribute('data-target');
+                if (target) window.scrollToId(target);
+            });
+        });
+    }
+
+    const btnGoDash = document.getElementById('btnGoDash');
+    if (btnGoDash) {
+        btnGoDash.addEventListener('click', () => {
+            const target = btnGoDash.getAttribute('data-target');
+            if (target) window.scrollToId(target);
+        });
+    }
+
+    const btnGoChat = document.getElementById('btnGoChat');
+    if (btnGoChat) {
+        btnGoChat.addEventListener('click', () => {
+            const target = btnGoChat.getAttribute('data-target');
+            if (target) window.scrollToId(target);
+        });
+    }
+
+    const langSelect = document.getElementById('langSelect');
+    if (langSelect) {
+        langSelect.addEventListener('change', () => {
+            window.switchLanguage();
+        });
+    }
+
+    const routeStart = document.getElementById('routeStart');
+    if (routeStart) {
+        routeStart.addEventListener('change', () => {
+            window.animateSvgRoute();
+        });
+    }
+
+    const routeDest = document.getElementById('routeDest');
+    if (routeDest) {
+        routeDest.addEventListener('change', () => {
+            window.animateSvgRoute();
+        });
+    }
+
+    const layerControls = document.getElementById('layerControls');
+    if (layerControls) {
+        layerControls.querySelectorAll('.layer-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const layer = btn.getAttribute('data-layer');
+                if (layer && typeof window.toggle3DLayer === 'function') {
+                    window.toggle3DLayer(layer);
+                }
+            });
+        });
+    }
+
+    const clearancePlansGrid = document.getElementById('clearancePlansGrid');
+    if (clearancePlansGrid) {
+        clearancePlansGrid.querySelectorAll('.plan-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const mode = card.getAttribute('data-mode');
+                if (mode) window.activateClearanceMode(mode);
+            });
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const mode = card.getAttribute('data-mode');
+                    if (mode) window.activateClearanceMode(mode);
+                }
+            });
+        });
+    }
+    
     // 1. Initialise Lucide icons
     if (window.lucide) {
         window.lucide.createIcons();
@@ -226,9 +331,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.initCircularGauges) {
         window.initCircularGauges();
     }
-    
-    // 3. Setup Three.js holographic twin is deferred to enterMainProject
-    // to ensure the canvas has non-zero dimensions when Three.js initializes.
     
     // 4. Start simulated background telemetry feeds
     if (window.startLiveTelemetryUpdates) {
@@ -241,5 +343,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Setup 3D mouse tilt parallax on glass cards
     init3DTilt();
     
-    console.log("🏟️ StadiumAI fully initialized globally with subtle 3D tilts.");
+    console.log("🏟️ StadiumAI fully initialized programmatically with strict event listeners.");
 });

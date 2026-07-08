@@ -6,10 +6,14 @@ describe('Telemetry Sim Tests', () => {
                 parentElement: { nextElementSibling: { nextElementSibling: { textContent: '' } } },
                 textContent: ''
             }),
-            createElement: jest.fn().mockReturnValue({ innerHTML: '', className: '' })
+            createElement: jest.fn().mockReturnValue({ innerHTML: '', className: '' }),
+            addEventListener: jest.fn()
         };
         global.window = {};
-        require('./telemetry-sim.js');
+        
+        jest.isolateModules(() => {
+            require('./telemetry-sim.js');
+        });
     });
 
     it('should init circular gauges', () => {
@@ -26,5 +30,16 @@ describe('Telemetry Sim Tests', () => {
             window.addAlertLogEntry('Test', 'Message');
             expect(container.prepend).toHaveBeenCalled();
         }
+    });
+
+    it('should trigger live background telemetry updates on intervals', () => {
+        jest.useFakeTimers();
+        if (typeof window.startLiveTelemetryUpdates === 'function') {
+            window.startLiveTelemetryUpdates();
+            // Advance timers by one tick of 4000ms
+            jest.advanceTimersByTime(4000);
+            expect(document.getElementById).toHaveBeenCalledWith('attendanceVal');
+        }
+        jest.useRealTimers();
     });
 });

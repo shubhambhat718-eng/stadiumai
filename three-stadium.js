@@ -3,6 +3,7 @@
 let scene, camera, renderer, stadiumGroup, particles, pathTube, beaconGroup, ecoGroup;
 let pPositions, initialColors, targetColors, particleCount = 1800;
 let timeTick = 0;
+let colorTransitionFrames = 120; // Optimization: only upload color buffer when morphing
 
 const beaconPositions = [
     new THREE.Vector3(-45, 1, 30),
@@ -261,20 +262,26 @@ window.initStadiumScene = function(canvas) {
 
         if (particles) {
             const positions = particles.geometry.attributes.position.array;
-            const colors = particles.geometry.attributes.color.array;
             
+            // Dynamic wave motions
             for (let i = 0; i < particleCount; i++) {
                 const idx = i * 3;
-                // Slow organic wave motion (frequency 0.8, amplitude 0.001)
                 positions[idx + 1] += Math.sin(timeTick * 0.8 + positions[idx]) * 0.001;
-                
-                // Slow color morph blending rate (from 0.08 to 0.03)
-                colors[idx] += (targetColors[idx] - colors[idx]) * 0.03;
-                colors[idx + 1] += (targetColors[idx + 1] - colors[idx + 1]) * 0.03;
-                colors[idx + 2] += (targetColors[idx + 2] - colors[idx + 2]) * 0.03;
             }
             particles.geometry.attributes.position.needsUpdate = true;
-            particles.geometry.attributes.color.needsUpdate = true;
+
+            // EFFICIENCY OPTIMIZATION: Only update particle colors if actively transitioning
+            if (colorTransitionFrames > 0) {
+                const colors = particles.geometry.attributes.color.array;
+                for (let i = 0; i < particleCount; i++) {
+                    const idx = i * 3;
+                    colors[idx] += (targetColors[idx] - colors[idx]) * 0.03;
+                    colors[idx + 1] += (targetColors[idx + 1] - colors[idx + 1]) * 0.03;
+                    colors[idx + 2] += (targetColors[idx + 2] - colors[idx + 2]) * 0.03;
+                }
+                particles.geometry.attributes.color.needsUpdate = true;
+                colorTransitionFrames--;
+            }
         }
 
         renderer.render(scene, camera);
@@ -384,6 +391,9 @@ window.toggle3DLayer = function(layer) {
         }
     }
     
+    // Trigger color transition morph frames
+    colorTransitionFrames = 120;
+
     logToConsole("SCENE", `Hologram layer switched to: ${layer.toUpperCase()}`);
 
     // Update active class on layer buttons

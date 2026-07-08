@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdnjs.cloudflare.com https://unpkg.com https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' https://cdnjs.cloudflare.com https://unpkg.com;">
     <title>StadiumAI — GenAI-Powered FIFA World Cup 2026 Operations</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     
@@ -29,7 +29,7 @@
         <div class="landing-content">
             <div class="landing-logo-area">
                 <div class="landing-logo-icon">
-                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
                         <path d="M24 4L44 14V34L24 44L4 34V14L24 4Z" stroke="url(#logoGrad)" stroke-width="2" fill="rgba(6,182,212,0.1)"/>
                         <path d="M24 12L36 18V30L24 36L12 30V18L24 12Z" fill="url(#logoGrad)" opacity="0.3"/>
                         <defs>
@@ -47,21 +47,21 @@
             <div class="landing-features">
                 <div class="landing-feature-card">
                     <div class="feature-icon-wrap">
-                        <i data-lucide="box" style="width:24px; height:24px;"></i>
+                        <i data-lucide="box" style="width:24px; height:24px;" aria-hidden="true"></i>
                     </div>
                     <h3>3D Digital Twin</h3>
                     <p>Real-time holographic stadium model with live telemetry</p>
                 </div>
                 <div class="landing-feature-card">
                     <div class="feature-icon-wrap cyan">
-                        <i data-lucide="bot" style="width:24px; height:24px;"></i>
+                        <i data-lucide="bot" style="width:24px; height:24px;" aria-hidden="true"></i>
                     </div>
                     <h3>AI Concierge</h3>
                     <p>Multilingual support powered by Gemini GenAI</p>
                 </div>
                 <div class="landing-feature-card">
                     <div class="feature-icon-wrap purple">
-                        <i data-lucide="leaf" style="width:24px; height:24px;"></i>
+                        <i data-lucide="leaf" style="width:24px; height:24px;" aria-hidden="true"></i>
                     </div>
                     <h3>Eco Tracking</h3>
                     <p>Carbon-neutral operations with real-time sustainability metrics</p>
@@ -69,9 +69,9 @@
             </div>
 
             <div class="landing-cta">
-                <button class="landing-get-started" onclick="enterMainProject()">
+                <button class="landing-get-started" id="landingEnterBtn">
                     <span>Get Started</span>
-                    <i data-lucide="arrow-right" style="width:20px; height:20px;"></i>
+                    <i data-lucide="arrow-right" style="width:20px; height:20px;" aria-hidden="true"></i>
                 </button>
                 <p class="landing-note">Experience the future of stadium operations</p>
             </div>
@@ -79,9 +79,9 @@
 
         <div class="landing-footer">
             <span>Powered by Generative AI</span>
-            <span class="landing-footer-dot">•</span>
+            <span class="landing-footer-dot" aria-hidden="true">•</span>
             <span>Real-time Data Pipelines</span>
-            <span class="landing-footer-dot">•</span>
+            <span class="landing-footer-dot" aria-hidden="true">•</span>
             <span>Carbon Neutral</span>
         </div>
     </div>
@@ -98,21 +98,21 @@
     <!-- Header / Navbar -->
     <nav class="navbar">
         <div class="logo">
-            <div class="logo-icon">🏟️</div>
+            <div class="logo-icon" aria-hidden="true">🏟️</div>
             <span>StadiumAI</span>
         </div>
-        <div class="nav-links">
-            <button class="nav-link active" onclick="scrollToId('hero')">Overview</button>
-            <button class="nav-link" onclick="scrollToId('dashboard')">Operations</button>
-            <button class="nav-link" onclick="scrollToId('ai-concierge')">AI Concierge</button>
-            <button class="nav-link" onclick="scrollToId('testimonials')">Feedbacks</button>
-            <button class="nav-link" onclick="scrollToId('clearance')">Clearance</button>
+        <div class="nav-links" id="navbarLinks">
+            <button class="nav-link active" data-target="hero">Overview</button>
+            <button class="nav-link" data-target="dashboard">Operations</button>
+            <button class="nav-link" data-target="ai-concierge">AI Concierge</button>
+            <button class="nav-link" data-target="testimonials">Feedbacks</button>
+            <button class="nav-link" data-target="clearance">Clearance</button>
         </div>
         <div class="nav-actions">
             <div class="clearance-badge" id="clearanceIndicator">
-                <i data-lucide="shield-check"></i> <span id="clearanceLabel">Fan View</span>
+                <i data-lucide="shield-check" aria-hidden="true"></i> <span id="clearanceLabel">Fan View</span>
             </div>
-            <select class="lang-selector" id="langSelect" onchange="switchLanguage()" aria-label="Select Language">
+            <select class="lang-selector" id="langSelect" aria-label="Select Language">
                 <option value="en">🌐 English</option>
                 <option value="es">🇪🇸 Español</option>
                 <option value="fr">🇫🇷 Français</option>
@@ -127,7 +127,7 @@
         <section class="hero" id="hero">
             <div class="hero-content">
                 <div class="hero-badge">
-                    <i data-lucide="activity" style="width: 14px; height: 14px;"></i>
+                    <i data-lucide="activity" style="width: 14px; height: 14px;" aria-hidden="true"></i>
                     <span id="liveBadge">LIVE — FIFA WORLD CUP 2026</span>
                 </div>
                 <h1 id="heroTitle">GenAI Stadium<br>Operations Twin</h1>
@@ -135,11 +135,11 @@
                     Interactive real-time 3D control center for tournament venues. Powered by generative AI for predictive crowd density routing, multilingual fan support, adaptive accessibility controls, and carbon-neutral resource tracking.
                 </p>
                 <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="scrollToId('dashboard')" aria-label="Go to Control Dashboard">
-                        <i data-lucide="layout-dashboard"></i> <span id="btnDash">Control Dashboard</span>
+                    <button class="btn btn-primary" id="btnGoDash" data-target="dashboard" aria-label="Go to Control Dashboard">
+                        <i data-lucide="layout-dashboard" aria-hidden="true"></i> <span id="btnDash">Control Dashboard</span>
                     </button>
-                    <button class="btn btn-secondary" onclick="scrollToId('ai-concierge')" aria-label="Go to AI Concierge">
-                        <i data-lucide="message-square"></i> <span id="btnChat">Ask AI Concierge</span>
+                    <button class="btn btn-secondary" id="btnGoChat" data-target="ai-concierge" aria-label="Go to AI Concierge">
+                        <i data-lucide="message-square" aria-hidden="true"></i> <span id="btnChat">Ask AI Concierge</span>
                     </button>
                 </div>
             </div>
@@ -151,7 +151,7 @@
                     
                     <div class="stadium-hud-top">
                         <div class="hud-glass-badge">
-                            <i data-lucide="box" style="width:14px; height:14px; color:var(--accent-cyan);"></i>
+                            <i data-lucide="box" style="width:14px; height:14px; color:var(--accent-cyan);" aria-hidden="true"></i>
                             <span>HOLOGRAPHIC DIGITAL TWIN</span>
                         </div>
                     </div>
@@ -159,23 +159,23 @@
                     <div class="stadium-hud-bottom">
                         <div class="hud-telemetry">
                             <div class="hud-chip"><span class="dot"></span> <span id="attendanceVal">78,432 / 80,000</span></div>
-                            <div class="hud-chip"><i data-lucide="thermometer" style="width:12px; height:12px;"></i> 24°C</div>
-                            <div class="hud-chip"><i data-lucide="wind" style="width:12px; height:12px;"></i> 12 km/h</div>
+                            <div class="hud-chip"><i data-lucide="thermometer" style="width:12px; height:12px;" aria-hidden="true"></i> 24°C</div>
+                            <div class="hud-chip"><i data-lucide="wind" style="width:12px; height:12px;" aria-hidden="true"></i> 12 km/h</div>
                         </div>
 
                         <!-- 3D Layer triggers -->
-                        <div class="hud-layer-controls" role="group" aria-label="3D Layers">
-                            <button class="layer-btn active" id="layerBtnCrowd" onclick="toggle3DLayer('crowd')" aria-label="Toggle Crowd Layer">
-                                <i data-lucide="users" style="width:12px; height:12px;"></i> Crowd
+                        <div class="hud-layer-controls" id="layerControls" role="group" aria-label="3D Layers">
+                            <button class="layer-btn active" id="layerBtnCrowd" data-layer="crowd" aria-label="Toggle Crowd Layer">
+                                <i data-lucide="users" style="width:12px; height:12px;" aria-hidden="true"></i> Crowd
                             </button>
-                            <button class="layer-btn" id="layerBtnRoute" onclick="toggle3DLayer('route')" aria-label="Toggle Route Layer">
-                                <i data-lucide="milestone" style="width:12px; height:12px;"></i> Path
+                            <button class="layer-btn" id="layerBtnRoute" data-layer="route" aria-label="Toggle Route Layer">
+                                <i data-lucide="milestone" style="width:12px; height:12px;" aria-hidden="true"></i> Path
                             </button>
-                            <button class="layer-btn" id="layerBtnAccess" onclick="toggle3DLayer('access')" aria-label="Toggle Access Layer">
-                                <i data-lucide="accessibility" style="width:12px; height:12px;"></i> Access
+                            <button class="layer-btn" id="layerBtnAccess" data-layer="access" aria-label="Toggle Access Layer">
+                                <i data-lucide="accessibility" style="width:12px; height:12px;" aria-hidden="true"></i> Access
                             </button>
-                            <button class="layer-btn" id="layerBtnEco" onclick="toggle3DLayer('eco')" aria-label="Toggle Eco-Grid Layer">
-                                <i data-lucide="leaf" style="width:12px; height:12px;"></i> Eco-Grid
+                            <button class="layer-btn" id="layerBtnEco" data-layer="eco" aria-label="Toggle Eco-Grid Layer">
+                                <i data-lucide="leaf" style="width:12px; height:12px;" aria-hidden="true"></i> Eco-Grid
                             </button>
                         </div>
                     </div>
@@ -194,11 +194,11 @@
                     </div>
                     <div class="telemetry-info">
                         <div class="telemetry-stat">
-                            <i data-lucide="clock" style="width:14px; height:14px;"></i>
+                            <i data-lucide="clock" style="width:14px; height:14px;" aria-hidden="true"></i>
                             <span>64:20 Min</span>
                         </div>
                         <div class="telemetry-stat">
-                            <i data-lucide="award" style="width:14px; height:14px;"></i>
+                            <i data-lucide="award" style="width:14px; height:14px;" aria-hidden="true"></i>
                             <span>Group Stage</span>
                         </div>
                     </div>
@@ -223,13 +223,13 @@
                             <span id="c1Desc">Sustainable venue resource metrics</span>
                         </div>
                         <div class="card-icon-glow">
-                            <i data-lucide="leaf"></i>
+                            <i data-lucide="leaf" aria-hidden="true"></i>
                         </div>
                     </div>
                     <div class="eco-metrics-container">
                         <div class="eco-circle-gauge">
                             <div class="gauge-svg-wrap">
-                                <svg>
+                                <svg aria-hidden="true">
                                     <defs>
                                         <linearGradient id="solarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                             <stop offset="0%" stop-color="#06b6d4" />
@@ -243,11 +243,11 @@
                             </div>
                             <span class="gauge-title" id="solarL">Solar Gen</span>
                             <span class="gauge-value">2,840 kWh</span>
-                            <span class="gauge-trend"><i data-lucide="arrow-up-right" style="width:12px; height:12px;"></i> 12%</span>
+                            <span class="gauge-trend"><i data-lucide="arrow-up-right" style="width:12px; height:12px;" aria-hidden="true"></i> 12%</span>
                         </div>
                         <div class="eco-circle-gauge">
                             <div class="gauge-svg-wrap">
-                                <svg>
+                                <svg aria-hidden="true">
                                     <defs>
                                         <linearGradient id="wasteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                             <stop offset="0%" stop-color="#10b981" />
@@ -261,11 +261,11 @@
                             </div>
                             <span class="gauge-title" id="wasteL">Waste Div</span>
                             <span class="gauge-value">78.4%</span>
-                            <span class="gauge-trend"><i data-lucide="arrow-up-right" style="width:12px; height:12px;"></i> 5%</span>
+                            <span class="gauge-trend"><i data-lucide="arrow-up-right" style="width:12px; height:12px;" aria-hidden="true"></i> 5%</span>
                         </div>
                         <div class="eco-circle-gauge">
                             <div class="gauge-svg-wrap">
-                                <svg>
+                                <svg aria-hidden="true">
                                     <defs>
                                         <linearGradient id="waterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                             <stop offset="0%" stop-color="#3b82f6" />
@@ -279,11 +279,11 @@
                             </div>
                             <span class="gauge-title" id="waterL">Water Recyc</span>
                             <span class="gauge-value">4,200 L</span>
-                            <span class="gauge-trend"><i data-lucide="arrow-up-right" style="width:12px; height:12px;"></i> 8%</span>
+                            <span class="gauge-trend"><i data-lucide="arrow-up-right" style="width:12px; height:12px;" aria-hidden="true"></i> 8%</span>
                         </div>
                         <div class="eco-circle-gauge">
                             <div class="gauge-svg-wrap">
-                                <svg>
+                                <svg aria-hidden="true">
                                     <defs>
                                         <linearGradient id="offsetGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                             <stop offset="0%" stop-color="#8b5cf6" />
@@ -297,7 +297,7 @@
                             </div>
                             <span class="gauge-title" id="carbonL">Offset</span>
                             <span class="gauge-value">1.2 Tons</span>
-                            <span class="gauge-trend"><i data-lucide="arrow-up-right" style="width:12px; height:12px;"></i> 15%</span>
+                            <span class="gauge-trend"><i data-lucide="arrow-up-right" style="width:12px; height:12px;" aria-hidden="true"></i> 15%</span>
                         </div>
                     </div>
                 </div>
@@ -310,17 +310,17 @@
                             <span id="c2Desc">Dynamic gate-to-seat navigation map</span>
                         </div>
                         <div class="card-icon-glow">
-                            <i data-lucide="navigation-2"></i>
+                            <i data-lucide="navigation-2" aria-hidden="true"></i>
                         </div>
                     </div>
                     <div class="nav-card-layout">
                         <div class="nav-controls">
-                            <select class="nav-select" id="routeStart" onchange="animateSvgRoute()" aria-label="Route Start">
+                            <select class="nav-select" id="routeStart" aria-label="Route Start">
                                 <option value="A">Gate A (Ground Level)</option>
                                 <option value="B">Gate B (North Concourse)</option>
                                 <option value="C">Gate C (South Ramp)</option>
                             </select>
-                            <select class="nav-select" id="routeDest" onchange="animateSvgRoute()" aria-label="Route Destination">
+                            <select class="nav-select" id="routeDest" aria-label="Route Destination">
                                 <option value="104">Seat 12A, Section 104 (Lower Tier)</option>
                                 <option value="208">Seat 4C, Section 208 (Upper Tier)</option>
                                 <option value="VIP">Executive Suite 12 (Club Level)</option>
@@ -341,7 +341,7 @@
                             </div>
                         </div>
                         <div class="nav-visual-container">
-                            <svg viewBox="0 0 400 160">
+                            <svg viewBox="0 0 400 160" aria-hidden="true">
                                 <!-- Base Grid Map -->
                                 <rect x="10" y="10" width="380" height="140" rx="12" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1.5"></rect>
                                 <path class="map-line-bg" d="M 30,30 L 100,30 L 100,130 L 370,130 M 100,80 L 370,80 M 230,30 L 230,130"></path>
@@ -367,28 +367,28 @@
                             <span id="c3Desc">Generative AI assistant for multilingual queries</span>
                         </div>
                         <div class="card-icon-glow">
-                            <i data-lucide="bot"></i>
+                            <i data-lucide="bot" aria-hidden="true"></i>
                         </div>
                     </div>
                     <div class="chat-card-wrap">
-                        <div class="chat-box-area" id="chatContainer">
+                        <div class="chat-box-area" id="chatContainer" aria-live="polite">
                             <div class="chat-bubble ai">
-                                <div class="chat-avatar ai"><i data-lucide="sparkles" style="width:14px; height:14px;"></i></div>
+                                <div class="chat-avatar ai"><i data-lucide="sparkles" style="width:14px; height:14px;" aria-hidden="true"></i></div>
                                 <div class="chat-text-bubble">
                                     <strong>StadiumAI:</strong> <span id="welcomeMsg">Welcome to the FIFA World Cup 2026 stadium guide. I can assist you with interactive wayfinding, transport logistics, sustainability details, and local food options in multiple languages. How may I help?</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="chat-suggested-chips" role="group" aria-label="Suggested Queries">
-                            <button class="suggested-chip" onclick="handleChipClick('Where is the nearest wheelchair elevator?')">♿ Access lift</button>
-                            <button class="suggested-chip" onclick="handleChipClick('What are the vegan food options nearby?')">🍔 Vegan food</button>
-                            <button class="suggested-chip" onclick="handleChipClick('When is the next shuttle bus leaving?')">🚌 Shuttle bus</button>
-                            <button class="suggested-chip" onclick="handleChipClick('Tell me about the carbon offsets today.')">🌱 Eco offsets</button>
+                        <div class="chat-suggested-chips" id="suggestedChips" role="group" aria-label="Suggested Queries">
+                            <button class="suggested-chip" data-query="Where is the nearest wheelchair elevator?">♿ Access lift</button>
+                            <button class="suggested-chip" data-query="What are the vegan food options nearby?">🍔 Vegan food</button>
+                            <button class="suggested-chip" data-query="When is the next shuttle bus leaving?">🚌 Shuttle bus</button>
+                            <button class="suggested-chip" data-query="Tell me about the carbon offsets today.">🌱 Eco offsets</button>
                         </div>
                         <div class="chat-input-bar">
-                            <input type="text" id="chatInput" placeholder="Type a message (e.g. 'Where is restroom?')..." onkeydown="if(event.key === 'Enter') handleSendChat()" aria-label="Chat Input">
-                            <button class="chat-send-btn" onclick="handleSendChat()" aria-label="Send Message">
-                                <i data-lucide="send" style="width:16px; height:16px;"></i>
+                            <input type="text" id="chatInput" placeholder="Type a message (e.g. 'Where is restroom?')..." aria-label="Chat Input">
+                            <button class="chat-send-btn" id="chatSendBtn" aria-label="Send Message">
+                                <i data-lucide="send" style="width:16px; height:16px;" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>
@@ -396,19 +396,27 @@
 
                 <!-- CARD 4: Operations Console (Incident Management) -->
                 <div class="glass-card span-6" id="opsConsoleCard">
+                    <div class="card-overlay hidden" id="opsConsoleOverlay">
+                        <div class="overlay-content">
+                            <i data-lucide="lock" style="width:32px; height:32px; color:var(--danger);" aria-hidden="true"></i>
+                            <h3>Access Denied</h3>
+                            <p>Authorized Operations Staff Only (Requires Volunteer Credentials or VIP Console access).</p>
+                        </div>
+                    </div>
+                    
                     <div class="card-title-area">
                         <div class="card-label">
                             <h3 id="c4Title">Incident Command Center</h3>
                             <span id="c4Desc">Venue zones monitoring & volunteer dispatching</span>
                         </div>
                         <div class="card-icon-glow">
-                            <i data-lucide="shield-alert"></i>
+                            <i data-lucide="shield-alert" aria-hidden="true"></i>
                         </div>
                     </div>
                     <div class="incident-grid-wrap">
                         <div class="command-status-grid" id="commandGrid">
                             <!-- Box 1 -->
-                            <div class="status-box selected" onclick="selectConsoleBox(this, 'North Gate', 'Queue overflow > 15m. Reroute volunteers to Gate B.', 'clear_queue', 'Clear Queue')">
+                            <div class="status-box selected" data-name="North Gate" data-desc="Queue overflow > 15m. Reroute volunteers to Gate B." data-action="clear_queue" data-btn-text="Clear Queue" tabindex="0" role="button">
                                 <span class="status-box-lbl">North Gate</span>
                                 <div class="status-box-info">
                                     <span class="status-box-val">Gates</span>
@@ -416,7 +424,7 @@
                                 </div>
                             </div>
                             <!-- Box 2 -->
-                            <div class="status-box" onclick="selectConsoleBox(this, 'Section 104', 'HVAC airflow is 2°C above benchmark. Rebalance vents.', 'adjust_hvac', 'Recalibrate HVAC')">
+                            <div class="status-box" data-name="Section 104" data-desc="HVAC airflow is 2°C above benchmark. Rebalance vents." data-action="adjust_hvac" data-btn-text="Recalibrate HVAC" tabindex="0" role="button">
                                 <span class="status-box-lbl">Section 104</span>
                                 <div class="status-box-info">
                                     <span class="status-box-val">Stands</span>
@@ -424,7 +432,7 @@
                                 </div>
                             </div>
                             <!-- Box 3 -->
-                            <div class="status-box" onclick="selectConsoleBox(this, 'Section 208', 'Temperature anomaly detected (+4°C). HVAC adjustment required.', 'adjust_hvac', 'Recalibrate HVAC')">
+                            <div class="status-box" data-name="Section 208" data-desc="Temperature anomaly detected (+4°C). HVAC adjustment required." data-action="adjust_hvac" data-btn-text="Recalibrate HVAC" tabindex="0" role="button">
                                 <span class="status-box-lbl">Section 208</span>
                                 <div class="status-box-info">
                                     <span class="status-box-val">Stands</span>
@@ -432,7 +440,7 @@
                                 </div>
                             </div>
                             <!-- Box 4 -->
-                            <div class="status-box" onclick="selectConsoleBox(this, 'Restrooms W2', 'Sensor reporting water filtration error. Dispatch maintenance.', 'dispatch_staff', 'Dispatch Staff')">
+                            <div class="status-box" data-name="Restrooms W2" data-desc="Sensor reporting water filtration error. Dispatch maintenance." data-action="dispatch_staff" data-btn-text="Dispatch Staff" tabindex="0" role="button">
                                 <span class="status-box-lbl">Restrooms W2</span>
                                 <div class="status-box-info">
                                     <span class="status-box-val">Service</span>
@@ -440,7 +448,7 @@
                                 </div>
                             </div>
                             <!-- Box 5 -->
-                            <div class="status-box" onclick="selectConsoleBox(this, 'Solar Roof', 'Solar array generating 2,840 kWh. Grid state nominal.', 'check_sensors', 'Audit Grid')">
+                            <div class="status-box" data-name="Solar Roof" data-desc="Solar array generating 2,840 kWh. Grid state nominal." data-action="check_sensors" data-btn-text="Audit Grid" tabindex="0" role="button">
                                 <span class="status-box-lbl">Solar Roof</span>
                                 <div class="status-box-info">
                                     <span class="status-box-val">Grid</span>
@@ -448,7 +456,7 @@
                                 </div>
                             </div>
                             <!-- Box 6 -->
-                            <div class="status-box" onclick="selectConsoleBox(this, 'Medical Stn 1', 'Fully stocked. 2 emergency volunteers active.', 'check_sensors', 'Audit Sensors')">
+                            <div class="status-box" data-name="Medical Stn 1" data-desc="Fully stocked. 2 emergency volunteers active." data-action="check_sensors" data-btn-text="Audit Sensors" tabindex="0" role="button">
                                 <span class="status-box-lbl">Medical Stn 1</span>
                                 <div class="status-box-info">
                                     <span class="status-box-val">Emergency</span>
@@ -456,7 +464,7 @@
                                 </div>
                             </div>
                             <!-- Box 7 -->
-                            <div class="status-box" onclick="selectConsoleBox(this, 'Shuttle Hub', 'Shuttle Bus B delayed 4 min due to highway traffic.', 'reroute_shuttles', 'Reroute Bus')">
+                            <div class="status-box" data-name="Shuttle Hub" data-desc="Shuttle Bus B delayed 4 min due to highway traffic." data-action="reroute_shuttles" data-btn-text="Reroute Bus" tabindex="0" role="button">
                                 <span class="status-box-lbl">Shuttle Hub</span>
                                 <div class="status-box-info">
                                     <span class="status-box-val">Transit</span>
@@ -464,7 +472,7 @@
                                 </div>
                             </div>
                             <!-- Box 8 -->
-                            <div class="status-box" onclick="selectConsoleBox(this, 'South Parking', '234 vacant spots remaining. Signages adjusted.', 'check_sensors', 'Audit Sensors')">
+                            <div class="status-box" data-name="South Parking" data-desc="234 vacant spots remaining. Signages adjusted." data-action="check_sensors" data-btn-text="Audit Sensors" tabindex="0" role="button">
                                 <span class="status-box-lbl">South Parking</span>
                                 <div class="status-box-info">
                                     <span class="status-box-val">Parking</span>
@@ -478,8 +486,14 @@
                             <div class="action-details">
                                 <span class="action-details-title" id="actionActiveName">North Gate</span>
                                 <span class="action-details-desc" id="actionActiveDesc">Queue overflow > 15m. Reroute volunteers to Gate B.</span>
+                                
+                                <!-- GenAI recommendation block -->
+                                <div class="genai-recommendation-panel" id="genaiRecommendationPanel">
+                                    <span class="recommendation-badge"><i data-lucide="sparkles" style="width:12px; height:12px;" aria-hidden="true"></i> GenAI Recommendation</span>
+                                    <p class="recommendation-text" id="genaiRecommendationText">Analyzing congestion parameters...</p>
+                                </div>
                             </div>
-                            <button class="action-btn" id="actionActiveBtn" onclick="triggerConsoleAction()" aria-label="Trigger Action">Clear Queue</button>
+                            <button class="action-btn" id="actionActiveBtn" aria-label="Trigger Action">Clear Queue</button>
                         </div>
                     </div>
                 </div>
@@ -492,33 +506,33 @@
                             <span id="c5Desc">AI pipelines & spatial technologies running StadiumAI</span>
                         </div>
                         <div class="card-icon-glow">
-                            <i data-lucide="layers"></i>
+                            <i data-lucide="layers" aria-hidden="true"></i>
                         </div>
                     </div>
                     <div class="tech-stack-container">
                         <div class="tech-box">
-                            <div class="tech-icon-frame"><i data-lucide="radio"></i></div>
+                            <div class="tech-icon-frame"><i data-lucide="radio" aria-hidden="true"></i></div>
                             <div class="tech-info">
                                 <span class="tech-name">IoT Telemetry Sensors</span>
                                 <span class="tech-desc" id="t1Desc">Collects turnstile volume, thermal sensors, and graywater level data.</span>
                             </div>
                         </div>
                         <div class="tech-box">
-                            <div class="tech-icon-frame gemini"><i data-lucide="sparkles"></i></div>
+                            <div class="tech-icon-frame gemini"><i data-lucide="sparkles" aria-hidden="true"></i></div>
                             <div class="tech-info">
                                 <span class="tech-name">Gemini GenAI Inferences</span>
                                 <span class="tech-desc" id="t2Desc">Generates real-time multilingual replies, translations, and predictive dispatches.</span>
                             </div>
                         </div>
                         <div class="tech-box">
-                            <div class="tech-icon-frame webgl"><i data-lucide="box"></i></div>
+                            <div class="tech-icon-frame webgl"><i data-lucide="box" aria-hidden="true"></i></div>
                             <div class="tech-info">
                                 <span class="tech-name">WebGL Spatial Engine</span>
                                 <span class="tech-desc" id="t3Desc">Renders real-time Three.js stadium models with dynamic spatial lighting overlays.</span>
                             </div>
                         </div>
                         <div class="tech-box">
-                            <div class="tech-icon-frame eco"><i data-lucide="activity"></i></div>
+                            <div class="tech-icon-frame eco"><i data-lucide="activity" aria-hidden="true"></i></div>
                             <div class="tech-info">
                                 <span class="tech-name">Carbon-Grid Monitor</span>
                                 <span class="tech-desc" id="t4Desc">Automated building controls and solar distribution grid tracking systems.</span>
@@ -529,16 +543,24 @@
 
                 <!-- Operational Alerts Log -->
                 <div class="glass-card span-5" id="alertsCard">
+                    <div class="card-overlay hidden" id="alertsOverlay">
+                        <div class="overlay-content">
+                            <i data-lucide="lock" style="width:32px; height:32px; color:var(--danger);" aria-hidden="true"></i>
+                            <h3>Access Denied</h3>
+                            <p>Staff Alert Feed Only (Requires Volunteer Credentials or VIP Console access).</p>
+                        </div>
+                    </div>
+                    
                     <div class="card-title-area">
                         <div class="card-label">
                             <h3 id="alertLogTitle">Live Operational Alerts</h3>
                             <span id="alertLogDesc">Automated telemetry trigger logs</span>
                         </div>
                         <div class="card-icon-glow" style="color: var(--warning);">
-                            <i data-lucide="bell"></i>
+                            <i data-lucide="bell" aria-hidden="true"></i>
                         </div>
                     </div>
-                    <div class="alerts-card-wrap" id="alertsContainer">
+                    <div class="alerts-card-wrap" id="alertsContainer" aria-live="polite">
                         <div class="alert-entry danger">
                             <div class="alert-meta">
                                 <span class="alert-time">14:32</span>
@@ -578,7 +600,7 @@
                             <span id="c6Desc">Upcoming matches and logistical assignments</span>
                         </div>
                         <div class="card-icon-glow">
-                            <i data-lucide="calendar"></i>
+                            <i data-lucide="calendar" aria-hidden="true"></i>
                         </div>
                     </div>
                     <div class="tournament-bracket-wrap">
@@ -634,7 +656,7 @@
                         "The real-time translation features built into the chatbot were absolute lifesavers. I could ask in French how to get to Section 104 and got step-free directions instantly."
                     </p>
                     <div class="testimonial-author">
-                        <div class="author-avatar">J</div>
+                        <div class="author-avatar" aria-hidden="true">J</div>
                         <div class="author-info">
                             <span class="author-name">Jean Dupont</span>
                             <span class="author-role" id="roleFan1">France Fan</span>
@@ -646,7 +668,7 @@
                         "As a volunteer coordinator, the incident command console is crucial. We identified a queue congestion at the North Gate stands and dispatched volunteers to open extra turnstiles."
                     </p>
                     <div class="testimonial-author">
-                        <div class="author-avatar violet">T</div>
+                        <div class="author-avatar violet" aria-hidden="true">T</div>
                         <div class="author-info">
                             <span class="author-name">Theresa Howard</span>
                             <span class="author-role" id="roleCoord">Volunteer Coordinator</span>
@@ -658,7 +680,7 @@
                         "The wheelchair routing and sensory zones tracking helped us locate quiet spaces for my son easily. The accessible route maps are accurate and highly responsive."
                     </p>
                     <div class="testimonial-author">
-                        <div class="author-avatar pink">M</div>
+                        <div class="author-avatar pink" aria-hidden="true">M</div>
                         <div class="author-info">
                             <span class="author-name">Mateo Silva</span>
                             <span class="author-role" id="roleFan2">Access Advocate / Fan</span>
@@ -674,53 +696,53 @@
                 <h2 id="planSecTitle">Select Your Operations Clearance</h2>
                 <p id="planSecDesc">Adjust the security credentials below to simulate different perspectives on the tournament twin.</p>
             </div>
-            <div class="plans-grid">
+            <div class="plans-grid" id="clearancePlansGrid">
                 
                 <!-- Fan Pass -->
-                <div class="plan-card active-plan" id="planFan" onclick="activateClearanceMode('fan')" role="button" tabindex="0" aria-label="Select Fan Pass">
+                <div class="plan-card active-plan" id="planFan" data-mode="fan" role="button" tabindex="0" aria-label="Select Fan Pass">
                     <span class="plan-name" id="p1Name">Fan Access Pass</span>
                     <span class="plan-subtitle" id="p1Sub">For match ticket holders</span>
                     <div class="plan-cost">$0<span>/ Match</span></div>
                     <button class="plan-btn" id="p1Btn" tabindex="-1">Active View</button>
                     <ul class="plan-features-list">
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pf1">3D Seat Wayfinding</span></li>
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pf2">AI Concierge chatbot</span></li>
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pf3">Food vendor pre-ordering</span></li>
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pf4">Transit schedule updates</span></li>
-                        <li class="plan-feature-item disabled-feat"><i data-lucide="x"></i> <span id="pf5">Telemetry sensor dashboards</span></li>
-                        <li class="plan-feature-item disabled-feat"><i data-lucide="x"></i> <span id="pf6">Volunteer dispatch dispatches</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pf1">3D Seat Wayfinding</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pf2">AI Concierge chatbot</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pf3">Food vendor pre-ordering</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pf4">Transit schedule updates</span></li>
+                        <li class="plan-feature-item disabled-feat"><i data-lucide="x" aria-hidden="true"></i> <span id="pf5">Telemetry sensor dashboards</span></li>
+                        <li class="plan-feature-item disabled-feat"><i data-lucide="x" aria-hidden="true"></i> <span id="pf6">Volunteer dispatch dispatches</span></li>
                     </ul>
                 </div>
 
                 <!-- Volunteer Pass -->
-                <div class="plan-card" id="planVolunteer" onclick="activateClearanceMode('volunteer')" role="button" tabindex="0" aria-label="Select Volunteer Pass">
+                <div class="plan-card" id="planVolunteer" data-mode="volunteer" role="button" tabindex="0" aria-label="Select Volunteer Pass">
                     <span class="plan-name" id="p2Name">Volunteer Credentials</span>
                     <span class="plan-subtitle" id="p2Sub">For operations & guide volunteers</span>
                     <div class="plan-cost">Level 1<span>/ Auth</span></div>
                     <button class="plan-btn" id="p2Btn" tabindex="-1">Authorize</button>
                     <ul class="plan-features-list">
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfV1">Access to all Fan services</span></li>
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfV2">Crowd bottleneck reporting</span></li>
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfV3">Sensory room slot check</span></li>
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfV4">Live incident notifications</span></li>
-                        <li class="plan-feature-item disabled-feat"><i data-lucide="x"></i> <span id="pfV5">HVAC temperature overrides</span></li>
-                        <li class="plan-feature-item disabled-feat"><i data-lucide="x"></i> <span id="pfV6">Automated sensor resets</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pfV1">Access to all Fan services</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pfV2">Crowd bottleneck reporting</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pfV3">Sensory room slot check</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pfV4">Live incident notifications</span></li>
+                        <li class="plan-feature-item disabled-feat"><i data-lucide="x" aria-hidden="true"></i> <span id="pfV5">HVAC temperature overrides</span></li>
+                        <li class="plan-feature-item disabled-feat"><i data-lucide="x" aria-hidden="true"></i> <span id="pfV6">Automated sensor resets</span></li>
                     </ul>
                 </div>
 
                 <!-- VIP Command Center -->
-                <div class="plan-card" id="planVIP" onclick="activateClearanceMode('vip')" role="button" tabindex="0" aria-label="Select VIP Pass">
+                <div class="plan-card" id="planVIP" data-mode="vip" role="button" tabindex="0" aria-label="Select VIP Pass">
                     <span class="plan-name" id="p3Name">Command VIP Console</span>
                     <span class="plan-subtitle" id="p3Sub">For stadium directors & coordinators</span>
                     <div class="plan-cost">VIP Admin<span>/ Root</span></div>
                     <button class="plan-btn" id="p3Btn" tabindex="-1">Grant Root</button>
                     <ul class="plan-features-list">
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfVIP1">Complete stadium controls</span></li>
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfVIP2">Remote HVAC recalibration</span></li>
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfVIP3">Instant alert broadcast triggers</span></li>
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfVIP4">Volunteer routing dispatches</span></li>
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfVIP5">Full carbon solar grid metrics</span></li>
-                        <li class="plan-feature-item"><i data-lucide="check"></i> <span id="pfVIP6">Database telemetry audits</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pfVIP1">Complete stadium controls</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pfVIP2">Remote HVAC recalibration</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pfVIP3">Instant alert broadcast triggers</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pfVIP4">Volunteer routing dispatches</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pfVIP5">Full carbon solar grid metrics</span></li>
+                        <li class="plan-feature-item"><i data-lucide="check" aria-hidden="true"></i> <span id="pfVIP6">Database telemetry audits</span></li>
                     </ul>
                 </div>
 
@@ -730,7 +752,7 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-logo">
-                <span>🏟️</span> StadiumAI
+                <span aria-hidden="true">🏟️</span> StadiumAI
             </div>
             <p>StadiumAI — Premium GenAI-Enabled Digital Twin for FIFA World Cup 2026</p>
             <p>Designed and Built using Generative AI • Real-time Data pipelines • Carbon Neutral</p>
